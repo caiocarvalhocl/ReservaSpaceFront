@@ -1,3 +1,4 @@
+import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { Space } from './components/Space';
@@ -10,6 +11,7 @@ export function App() {
         <Hero />
         <Space />
       </div>
+      <Footer />
     </>
   );
 }
