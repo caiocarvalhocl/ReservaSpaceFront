@@ -1,0 +1,69 @@
+export function LoginForm() {
+  const handleSubmit = () => {};
+
+  return (
+    <>
+      <div className='bg-white p-4'>
+        <div className='flex flex-col gap-4 max-w-11/12 mx-auto'>
+          <div className='flex flex-col items-center gap-4 py-4'>
+            <h2 className='text-3xl md:text-4xl font-bold'>Entrar</h2>
+            <p className='text-center text-xl md:text-2xl lg:text-3xl'>
+              Digite suas credencias para acessar sua conta
+            </p>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div className='flex flex-col gap-4'>
+              <div className='flex flex-col'>
+                <label htmlFor='email'>E-mail</label>
+                <input
+                  type='email'
+                  id='email'
+                  className='p-2 outline outline-gray-300'
+                  required
+                />
+              </div>
+
+              <div className='flex flex-col'>
+                <label htmlFor='password'>Senha</label>
+                <input
+                  type='password'
+                  id='password'
+                  className='p-2 outline outline-gray-300'
+                  required
+                />
+              </div>
+
+              <div className='flex items-center'>
+                <div className='flex gap-4 items-center'>
+                  <input type='checkbox' id='checkbox' required />
+                  <label htmlFor='checkbox' className='text-xl sm:text-2xl'>
+                    Lembrar de mim
+                  </label>
+                </div>
+                <a className='text-xl sm:text-2xl text-blue-400 ml-auto cursor-pointer'>
+                  Esqueceu a senha?
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <button
+                type='submit'
+                className='bg-black p-4 my-6 text-white w-full font-bold cursor-pointer'
+              >
+                Entrar
+              </button>
+            </div>
+
+            <div className='flex items-center gap-2 justify-center'>
+              <p className='text-xl sm:text-2xl'>Nao tem uma conta?</p>
+              <a className='text-xl sm:text-2xl text-blue-400 cursor-pointer'>
+                Criar Conta
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}

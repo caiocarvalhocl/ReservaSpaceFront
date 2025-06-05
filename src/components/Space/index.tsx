@@ -14,53 +14,56 @@ export function Space() {
         console.log('Fetched spaces:', data);
       } catch (err: any) {
         console.error('Error fetching spaces:', err);
-      } finally {
       }
     };
     fetchSpacesData();
   }, []);
 
   return (
-    <section className='w-full mt-2 flex flex-col gap-8 p-6 '>
-      <div className='flex flex-col md:flex-row gap-4 bg-white outline outline-gray-100 w-full p-8 rounded-xl mx-auto'>
-        <div className='flex flex-col w-full'>
-          <label className='text-xl sm:text-2xl'>Buscar espacos</label>
-          <input
-            type='text'
-            placeholder='Digite o nome do espaços...'
-            className='outline outline-gray-200 p-2 text-xl sm:text-2xl'
-          />
-        </div>
+    <section className=''>
+      <div>
+        <div className='p-4 flex flex-col gap-6'>
+          <div className='flex flex-col md:flex-row gap-4 bg-white outline outline-gray-100 w-full p-8 rounded-xl mx-auto'>
+            <div className='flex flex-col w-full gap-1'>
+              <label className='text-xl sm:text-2xl'>Buscar espacos</label>
+              <input
+                type='text'
+                placeholder='Digite o nome do espaços...'
+                className='outline outline-gray-200 p-2 text-xl sm:text-2xl'
+              />
+            </div>
 
-        <div className='flex flex-col'>
-          <label className='text-xl sm:text-2xl'>Tipo de espaço</label>
-          <select className='outline outline-gray-200 p-2 text-xl sm:text-2xl'>
-            <option value='all' defaultValue={''} selected>
-              Todos os tipos
-            </option>
-            {spaces.map((space, index) => (
-              <option key={index} value={space.type}>
-                {space.type}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+            <div className='flex flex-col gap-1'>
+              <label className='text-xl sm:text-2xl'>Tipo de espaço</label>
+              <select className='outline outline-gray-200 p-2 text-xl sm:text-2xl'>
+                <option value='all'>Todos os tipos</option>
+                {spaces.map((space, index) => (
+                  <option key={index} value={space.type}>
+                    {space.type}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-      <div className=' w-full mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch'>
-        {spaces.map((space, index) => (
-          <SpaceCard
-            key={index}
-            type={space.type}
-            imageUrl={space.imageUrl}
-            name={space.name}
-            price={space.price}
-            description={space.description}
-            capacity={space.capacity}
-            spaceResources={space.spaceResources}
-            isAvailable={space.isAvailable}
-          />
-        ))}
+          <div>
+            <div className='flex flex-col sm:flex-row flex-wrap gap-4'>
+              {spaces.map((space, index) => (
+                <SpaceCard
+                  key={index}
+                  type={space.type}
+                  imageUrl={space.imageUrl}
+                  name={space.name}
+                  price={space.price}
+                  description={space.description}
+                  capacity={space.capacity}
+                  spaceResources={space.spaceResources}
+                  isAvailable={space.isAvailable}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

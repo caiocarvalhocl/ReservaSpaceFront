@@ -16,7 +16,9 @@ export function Header() {
             <a className='cursor-pointer'>Perfil</a>
           </li>
           <li className='bg-black p-2 rounded-md flex items-center cursor-pointer'>
-            <a className='text-white'>Entrar</a>
+            <a href='/login' className='cursor-pointer font-bold text-white'>
+              Entrar
+            </a>
           </li>
         </ul>
       </nav>

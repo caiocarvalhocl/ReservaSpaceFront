@@ -34,8 +34,8 @@ export function Footer() {
           </div>
           <div>
             <h3 className='font-semibold mb-4'>Contato</h3>
-            <div className='space-y-2 text-gray-400 overflow-hidden'>
-              <p>📧 caioalmediacarvalholima@gmail.com</p>
+            <div className='space-y-2 text-gray-400 overflow-x-clip'>
+              <p>📧 caioalmeidacarvalholima@gmail.com</p>
               <p>📞 (99) 98124-9825</p>
               <p>📍 Dois Vizinhos, PR</p>
             </div>
