@@ -2,6 +2,8 @@ import { ImageOff } from 'lucide-react';
 import { Users } from 'lucide-react';
 import { spaceTypeMap, type SpaceCardProps } from '../../types/components';
 import { ResourceInfoLayout } from '../ResourceInfoLayout';
+import { Reservation } from '../Reservation';
+import { useState } from 'react';
 
 export function SpaceCard({
   imageUrl,
@@ -13,6 +15,12 @@ export function SpaceCard({
   spaceResources,
   isAvailable,
 }: SpaceCardProps) {
+  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
+
+  const handleIsReservationModal = () => {
+    setIsReservationModalOpen(prev => !prev);
+  };
+
   return (
     <div className='w-full sm:max-w-xl lg:max-w-2xl mx-auto'>
       <div className=''>
@@ -70,11 +78,19 @@ export function SpaceCard({
           </div>
 
           <div>
-            <button className='bg-black text-white w-full p-2 font-bold text-2xl rounded-md cursor-pointer'>
-              Reservar Agora
+            <button
+              className={`bg-black text-white w-full p-2 font-bold text-2xl rounded-md ${isAvailable ? 'cursor-pointer' : ''}`}
+              disabled={!isAvailable}
+              onClick={handleIsReservationModal}
+            >
+              {isAvailable ? <>Reservar Agora</> : <>Indisponível</>}
             </button>
           </div>
         </div>
+
+        {isReservationModalOpen && (
+          <Reservation setIsOpen={handleIsReservationModal} name={name} />
+        )}
       </div>
     </div>
   );

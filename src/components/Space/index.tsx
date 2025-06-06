@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getSpaces } from '../../service/api';
 import { SpaceCard } from '../SpaceCard';
-import type { SpaceCardProps } from '../../types/components';
+import { spaceTypeMap, type SpaceCardProps } from '../../types/components';
 
 export function Space() {
   const [spaces, setSpaces] = useState<SpaceCardProps[]>([]);
@@ -37,11 +37,13 @@ export function Space() {
               <label className='text-xl sm:text-2xl'>Tipo de espaço</label>
               <select className='outline outline-gray-200 p-2 text-xl sm:text-2xl'>
                 <option value='all'>Todos os tipos</option>
-                {spaces.map((space, index) => (
-                  <option key={index} value={space.type}>
-                    {space.type}
-                  </option>
-                ))}
+                {Array.from(new Set(spaces.map(space => space.type))).map(
+                  (type, index) => (
+                    <option key={index} value={type}>
+                      {spaceTypeMap[type]}
+                    </option>
+                  ),
+                )}
               </select>
             </div>
           </div>

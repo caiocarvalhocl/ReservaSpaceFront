@@ -29,3 +29,8 @@ export const spaceTypeMap: Record<string, string> = {
   sports_court: 'Quadra Esportiva',
   meeting_room: 'Sala de Reunião',
 };
+
+export interface ReservationProps {
+  name: string;
+  setIsOpen: () => void;
+}
