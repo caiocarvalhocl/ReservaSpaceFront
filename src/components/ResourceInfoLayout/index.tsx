@@ -1,4 +1,4 @@
-import type { ResourceInfoLayoutProps } from '../../types/components';
+import type { ResourceInfoLayoutProps } from '../../interfaces/components';
 
 export function ResourceInfoLayout({ resources }: ResourceInfoLayoutProps) {
   return (

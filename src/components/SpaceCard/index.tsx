@@ -1,9 +1,10 @@
 import { ImageOff } from 'lucide-react';
 import { Users } from 'lucide-react';
-import { spaceTypeMap, type SpaceCardProps } from '../../types/components';
+import { spaceTypeMap } from '../../types/components';
 import { ResourceInfoLayout } from '../ResourceInfoLayout';
 import { Reservation } from '../Reservation';
 import { useState } from 'react';
+import type { SpaceCardProps } from '../../interfaces/components';
 
 export function SpaceCard({
   imageUrl,
@@ -39,7 +40,7 @@ export function SpaceCard({
                 Disponível
               </span>
             ) : (
-              <span className='bg-black text-white text-xl sm:text-2xl text-sm font-semibold px-2 py-1 rounded-full self-start'>
+              <span className='bg-black text-white text-xl sm:text-2xl font-semibold px-2 py-1 rounded-full self-start'>
                 Indisponível
               </span>
             )}

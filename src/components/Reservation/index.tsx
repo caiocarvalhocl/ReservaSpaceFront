@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import type { ReservationProps } from '../../types/components/index.ts';
+import type { ReservationProps } from '../../interfaces/components/index.ts';
 import { ReservationForm } from '../Form/ReservationForm';
 
 export function Reservation({ setIsOpen, name }: ReservationProps) {

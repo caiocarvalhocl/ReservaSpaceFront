@@ -1,5 +1,23 @@
+import { useState, type FormEvent } from 'react';
+import { useUserContext } from '../../../hooks/useUserContext';
+import { UserActions } from '../../../contexts/UserContext/userActions';
+import { login } from '../../../service/api/useUser';
+
 export function LoginForm() {
-  const handleSubmit = () => {};
+  const { dispatch } = useUserContext();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const user = await login({ email, password });
+      dispatch({ type: UserActions.LOGIN, payload: user });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -18,6 +36,8 @@ export function LoginForm() {
                 <input
                   type='email'
                   id='email'
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
                   className='p-2 outline outline-gray-300'
                   required
                 />
@@ -28,6 +48,8 @@ export function LoginForm() {
                 <input
                   type='password'
                   id='password'
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
                   className='p-2 outline outline-gray-300'
                   required
                 />
@@ -35,7 +57,7 @@ export function LoginForm() {
 
               <div className='flex items-center'>
                 <div className='flex gap-4 items-center'>
-                  <input type='checkbox' id='checkbox' required />
+                  <input type='checkbox' id='checkbox' />
                   <label htmlFor='checkbox' className='text-xl sm:text-2xl'>
                     Lembrar de mim
                   </label>

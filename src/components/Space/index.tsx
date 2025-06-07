@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { getSpaces } from '../../service/api';
+import { getSpaces } from '../../service/api/useSpace';
 import { SpaceCard } from '../SpaceCard';
-import { spaceTypeMap, type SpaceCardProps } from '../../types/components';
+import { type SpaceCardProps } from '../../interfaces/components';
+import { spaceTypeMap } from '../../types/components';
 
 export function Space() {
   const [spaces, setSpaces] = useState<SpaceCardProps[]>([]);
