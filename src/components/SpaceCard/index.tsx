@@ -23,9 +23,9 @@ export function SpaceCard({
   };
 
   return (
-    <div className='w-full sm:max-w-xl lg:max-w-2xl mx-auto'>
-      <div className=''>
-        <div className='relative flex justify-center items-center bg-gray-400 w-full min-h-60 p-4'>
+    <div className='w-full sm:max-w-xl lg:max-w-2xl flex flex-col justify-between'>
+      <div>
+        <div className='relative flex justify-center items-center bg-gray-400 w-full min-h-60 p-4 rounded-t-lg'>
           <div>
             {imageUrl !== null ? (
               <img src={imageUrl} alt='Picture' className='object-cover' />
@@ -53,7 +53,7 @@ export function SpaceCard({
           </div>
         </div>
 
-        <div className='flex flex-col gap-4 p-4 bg-white'>
+        <div className='flex flex-col gap-4 p-4 bg-white rounded-b-lg'>
           <div className='flex max-w-full overflow-hidden'>
             <h3 className='font-semibold text-2xl sm:text-4xl'>{name}</h3>
             <p className='flex gap-2 text-blue-900 font-semibold text-xl sm:text-xl md:text-3xl ml-auto'>

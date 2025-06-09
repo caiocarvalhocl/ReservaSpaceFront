@@ -16,3 +16,22 @@ export async function login({
 
   return response.data;
 }
+
+export async function register({
+  email,
+  password,
+  phone,
+  name,
+}: {
+  email: string;
+  password: string;
+  phone: string;
+  name: string;
+}) {
+  const response: AxiosResponse<UserStateModel> = await api.post(
+    '/api/users/register',
+    { email, password, name, phone },
+  );
+
+  return response.data;
+}

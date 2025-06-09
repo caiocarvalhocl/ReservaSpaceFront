@@ -1,8 +1,8 @@
 import { ArrowLeft, CalendarDays } from 'lucide-react';
-import { LoginForm } from '../../components/Form/LoginForm';
 import { useNavigate } from 'react-router';
+import { RegisterForm } from '../../../components/Form/RegisterForm';
 
-export function Login() {
+export function Register() {
   const navigate = useNavigate();
 
   return (
@@ -21,14 +21,10 @@ export function Login() {
               <CalendarDays color='blue' size='2.25rem' />
               <h1 className='text-4xl'>ReservaSpace</h1>
             </div>
-
-            <p className='text-center text-xl text-gray-500'>
-              Acesse sua conta para gerenciar suas reservas
-            </p>
           </div>
 
           <div className='p-4 w-full sm:max-w-3xl lg:max-w-4xl'>
-            <LoginForm />
+            <RegisterForm />
           </div>
         </div>
       </div>

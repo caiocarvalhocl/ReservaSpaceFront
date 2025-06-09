@@ -3,7 +3,6 @@ export interface UserStateModel {
     isLoggedIn: boolean;
     id: number;
     name: string;
-    email: string;
     role: string;
   };
 }

@@ -1,8 +1,7 @@
 export const initialState = {
   user: {
-    id: 1,
+    id: 0,
     isLoggedIn: false,
-    email: '',
     name: '',
     role: '',
   },

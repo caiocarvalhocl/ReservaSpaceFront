@@ -1,20 +1,22 @@
 import { useState, type FormEvent } from 'react';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { UserActions } from '../../../contexts/UserContext/userActions';
-import { login } from '../../../service/api/useUser';
+import { register } from '../../../service/api/useUser';
 import { useNavigate } from 'react-router';
 
-export function LoginForm() {
+export function RegisterForm() {
   const navigate = useNavigate();
   const { dispatch } = useUserContext();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const user = await login({ email, password });
+      const user = await register({ email, password, name, phone });
       dispatch({ type: UserActions.LOGIN, payload: user });
       navigate('/');
     } catch (error) {
@@ -29,11 +31,22 @@ export function LoginForm() {
           <div className='flex flex-col items-center gap-4 py-4'>
             <h2 className='text-3xl md:text-4xl font-bold'>Entrar</h2>
             <p className='text-center text-xl md:text-2xl lg:text-3xl'>
-              Digite suas credencias para acessar sua conta
+              Digite suas credencias para cria sua conta
             </p>
           </div>
           <form onSubmit={handleSubmit}>
             <div className='flex flex-col gap-4'>
+              <div className='flex flex-col'>
+                <label htmlFor='name'>Nome</label>
+                <input
+                  type='text'
+                  id='name'
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  className='p-2 outline outline-gray-300'
+                  required
+                />
+              </div>
               <div className='flex flex-col'>
                 <label htmlFor='email'>E-mail</label>
                 <input
@@ -58,16 +71,16 @@ export function LoginForm() {
                 />
               </div>
 
-              <div className='flex items-center'>
-                <div className='flex gap-4 items-center'>
-                  <input type='checkbox' id='checkbox' />
-                  <label htmlFor='checkbox' className='text-xl sm:text-2xl'>
-                    Lembrar de mim
-                  </label>
-                </div>
-                <a className='text-xl sm:text-2xl text-blue-400 ml-auto cursor-pointer'>
-                  Esqueceu a senha?
-                </a>
+              <div className='flex flex-col'>
+                <label htmlFor='phone'>Phone</label>
+                <input
+                  type='text'
+                  id='phone'
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
+                  className='p-2 outline outline-gray-300'
+                  required
+                />
               </div>
             </div>
 
@@ -76,17 +89,17 @@ export function LoginForm() {
                 type='submit'
                 className='bg-black p-4 my-6 text-white w-full font-bold cursor-pointer'
               >
-                Entrar
+                Criar Conta
               </button>
             </div>
 
             <div className='flex items-center gap-2 justify-center'>
-              <p className='text-xl sm:text-2xl'>Nao tem uma conta?</p>
+              <p className='text-xl sm:text-2xl'>Ja possui uma conta?</p>
               <a
                 className='text-xl sm:text-2xl text-blue-400 cursor-pointer'
-                onClick={() => navigate('/register')}
+                onClick={() => navigate('/login')}
               >
-                Criar Conta
+                Entrar
               </a>
             </div>
           </form>

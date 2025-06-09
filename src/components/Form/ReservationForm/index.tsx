@@ -3,8 +3,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Clock } from 'lucide-react';
 import dayjs from 'dayjs';
 import { useState, type FormEvent } from 'react';
+import { useUserContext } from '../../../hooks/useUserContext';
+import { useNavigate } from 'react-router';
 
 export function ReservationForm() {
+  const navigate = useNavigate();
+  const { state } = useUserContext();
   const [date, setDate] = useState(dayjs());
   const [selectedTime, setSelectedTime] = useState<number | null>(null);
 
@@ -26,6 +30,12 @@ export function ReservationForm() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!state.user.isLoggedIn) {
+      alert('Loge na sua conta para conseguir reservar um espaco!');
+      navigate('/login');
+      return;
+    }
   };
 
   return (
