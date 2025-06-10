@@ -25,3 +25,8 @@ export interface ReservationProps {
   name: string;
   setIsOpen: () => void;
 }
+
+export interface ProtectedRouteProps {
+  isLoggedIn: boolean;
+  children?: React.ReactNode;
+}

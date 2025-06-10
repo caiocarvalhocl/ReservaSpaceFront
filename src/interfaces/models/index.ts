@@ -1,8 +1,10 @@
+export interface UserInfo {
+  id: number;
+  name: string;
+  role: string;
+}
+
 export interface UserStateModel {
-  user: {
-    isLoggedIn: boolean;
-    id: number;
-    name: string;
-    role: string;
-  };
+  user: UserInfo;
+  isLoggedIn: boolean;
 }

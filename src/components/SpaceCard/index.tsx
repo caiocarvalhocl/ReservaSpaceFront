@@ -80,7 +80,7 @@ export function SpaceCard({
 
           <div>
             <button
-              className={`bg-black text-white w-full p-2 font-bold text-2xl rounded-md ${isAvailable ? 'cursor-pointer' : ''}`}
+              className={`bg-black text-white w-full p-2 font-bold text-2xl rounded-md ${isAvailable ? 'cursor-pointer' : 'bg-gray-500'}`}
               disabled={!isAvailable}
               onClick={handleIsReservationModal}
             >

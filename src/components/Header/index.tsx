@@ -1,8 +1,10 @@
 import { CalendarDays } from 'lucide-react';
 import { useUserContext } from '../../hooks/useUserContext';
+import { useNavigate } from 'react-router';
 
 export function Header() {
   const { state } = useUserContext();
+  const navigate = useNavigate();
 
   return (
     <div className='overflow-hidden'>
@@ -12,10 +14,15 @@ export function Header() {
           <h1 className='text-2xl md:text-3xl font-bold'>ReservaSpace</h1>
         </div>
         <ul className='flex gap-2 sm:gap-4 items-center text-base sm:text-xl'>
-          {state.user.isLoggedIn && (
+          {state.isLoggedIn && (
             <>
               <li className='flex items-center'>
-                <a className='cursor-pointer'>Minhas Reservas</a>
+                <a
+                  className='cursor-pointer'
+                  onClick={() => navigate('/myreservations')}
+                >
+                  Minhas Reservas
+                </a>
               </li>
 
               <li className='bg-black p-2 rounded-md flex items-center cursor-pointer'>
@@ -26,9 +33,12 @@ export function Header() {
             </>
           )}
 
-          {!state.user.isLoggedIn && (
+          {!state.isLoggedIn && (
             <li className='bg-black p-2 rounded-md flex items-center cursor-pointer'>
-              <a href='/login' className='cursor-pointer font-bold text-white'>
+              <a
+                className='cursor-pointer font-bold text-white'
+                onClick={() => navigate('/login')}
+              >
                 Entrar
               </a>
             </li>

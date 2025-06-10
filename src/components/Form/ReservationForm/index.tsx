@@ -31,7 +31,7 @@ export function ReservationForm() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!state.user.isLoggedIn) {
+    if (!state.isLoggedIn) {
       alert('Loge na sua conta para conseguir reservar um espaco!');
       navigate('/login');
       return;

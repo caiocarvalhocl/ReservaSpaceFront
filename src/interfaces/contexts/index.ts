@@ -1,6 +1,6 @@
 import type { UserActions } from '../../contexts/UserContext/userActions';
 import type { UserActionsModel } from '../../types/contexts';
-import type { UserStateModel } from '../models';
+import type { UserInfo, UserStateModel } from '../models';
 
 export interface UserContextProps {
   state: UserStateModel;
@@ -9,7 +9,7 @@ export interface UserContextProps {
 
 export interface LoginAction {
   type: UserActions.LOGIN;
-  payload: UserStateModel;
+  payload: UserInfo;
 }
 
 export interface LogoutAction {

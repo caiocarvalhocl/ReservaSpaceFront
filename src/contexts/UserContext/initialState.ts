@@ -1,8 +1,10 @@
+export const initialUser = {
+  id: 0,
+  name: '',
+  role: '',
+};
+
 export const initialState = {
-  user: {
-    id: 0,
-    isLoggedIn: false,
-    name: '',
-    role: '',
-  },
+  user: initialUser,
+  isLoggedIn: false,
 };
