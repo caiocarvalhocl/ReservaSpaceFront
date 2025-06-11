@@ -4,11 +4,8 @@ import { Login } from '../pages/Auth/Login';
 import { Register } from '../pages/Auth/Register';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { MyReservation } from '../pages/MyReservation';
-import { useUserContext } from '../hooks/useUserContext';
 
 export function MainRoutes() {
-  const { state } = useUserContext();
-
   return (
     <BrowserRouter>
       <Routes>
@@ -18,7 +15,7 @@ export function MainRoutes() {
         <Route
           path='/myreservations'
           element={
-            <ProtectedRoute isLoggedIn={state.isLoggedIn}>
+            <ProtectedRoute>
               <MyReservation />
             </ProtectedRoute>
           }

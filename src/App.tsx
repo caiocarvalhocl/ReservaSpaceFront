@@ -1,12 +1,12 @@
-import { UserContextProvider } from './contexts/UserContext/UserContextProvider';
+import { AuthContextProvider } from './contexts/AuthContext/AuthContextProvider';
 import { MainRoutes } from './routes/MainRoutes';
 
 export function App() {
   return (
     <>
-      <UserContextProvider>
+      <AuthContextProvider>
         <MainRoutes />
-      </UserContextProvider>
+      </AuthContextProvider>
     </>
   );
 }

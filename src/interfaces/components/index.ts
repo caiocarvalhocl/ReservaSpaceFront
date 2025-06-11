@@ -27,7 +27,6 @@ export interface ReservationProps {
 }
 
 export interface ProtectedRouteProps {
-  isLoggedIn: boolean;
   children?: React.ReactNode;
 }
 

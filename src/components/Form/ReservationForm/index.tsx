@@ -3,30 +3,16 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Clock } from 'lucide-react';
 import dayjs from 'dayjs';
 import { useState, type FormEvent } from 'react';
-import { useUserContext } from '../../../hooks/useUserContext';
+import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router';
 
 export function ReservationForm() {
   const navigate = useNavigate();
-  const { state } = useUserContext();
+  const { state } = useAuth();
   const [date, setDate] = useState(dayjs());
   const [selectedTime, setSelectedTime] = useState<number | null>(null);
 
-  const timeSlots = [
-    '08:00',
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00',
-    '15:00',
-    '16:00',
-    '17:00',
-    '18:00',
-    '19:00',
-    '20:00',
-  ];
+  const timeSlots = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -68,9 +54,7 @@ export function ReservationForm() {
         </div>
 
         <div className='grid grid-cols-subgrid'>
-          <h3 className='text-xl sm:text-2xl my-4 sm:m-0 sm:mb-2'>
-            Horarios disponiveis
-          </h3>
+          <h3 className='text-xl sm:text-2xl my-4 sm:m-0 sm:mb-2'>Horarios disponiveis</h3>
           <div className='flex md:flex-row flex-wrap gap-4'>
             {timeSlots.map((time, index) => (
               <div
@@ -86,10 +70,7 @@ export function ReservationForm() {
         </div>
       </div>
 
-      <button
-        type='submit'
-        className='bg-black text-white w-full p-2 font-semibold text-xl sm:text-2xl cursor-pointer'
-      >
+      <button type='submit' className='bg-black text-white w-full p-2 font-semibold text-xl sm:text-2xl cursor-pointer'>
         Reservar
       </button>
     </form>
