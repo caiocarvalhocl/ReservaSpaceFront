@@ -2,8 +2,7 @@ import { useEffect, useReducer } from 'react';
 import { AuthContext } from './AuthContext';
 import { authReducer } from './authReducer';
 import { AuthActions } from './authActions';
-import { login as apiLogin } from '../../service/api/auth';
-import { register as apiRegister } from '../../service/api/auth';
+import { login as apiLogin, register as apiRegister } from '../../services/api/auth';
 import type { AuthContextProps, AuthStateModel, UserInfo } from '../../interfaces/auth/user';
 import type { LoginFormProps, RegisterFormProps } from '../../interfaces/auth/auth';
 
@@ -20,18 +19,30 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
     const loadUserFromStorage = () => {
       const storedToken = localStorage.getItem('authToken');
       const storedUser = localStorage.getItem('user');
+      const tokenExpiry = localStorage.getItem('tokenExpiry');
 
-      if (storedUser && storedToken) {
-        try {
-          const user: UserInfo = JSON.parse(storedUser);
+      if (storedUser && storedToken && tokenExpiry) {
+        const isExpired = Date.now() > Number(tokenExpiry);
 
-          dispatch({ type: AuthActions.SET_USER_FROM_STORAGE, payload: { user, token: storedToken } });
-        } catch (e) {
-          console.error('Failed to parse user from localStorage', e);
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('user');
-          dispatch({ type: AuthActions.LOGOUT });
+        if (!isExpired) {
+          try {
+            const user: UserInfo = JSON.parse(storedUser);
+
+            dispatch({ type: AuthActions.SET_USER_FROM_STORAGE, payload: { user, token: storedToken } });
+            return;
+          } catch (e) {
+            console.error('Failed to parse user from localStorage', e);
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            dispatch({ type: AuthActions.LOGOUT });
+          }
         }
+
+        console.warn('Token expirado ao carregar do storage');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+        localStorage.removeItem('tokenExpiry');
+        dispatch({ type: AuthActions.LOGOUT });
       }
     };
 
@@ -50,6 +61,10 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
 
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(user));
+
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const expiresAt = payload.exp * 1000;
+      localStorage.setItem('tokenExpiry', String(expiresAt));
 
       dispatch({ type: AuthActions.LOGIN, payload: { user, token } });
 

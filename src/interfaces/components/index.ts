@@ -17,13 +17,28 @@ export interface ResourcesProps {
     name: string;
   };
 }
-export interface ResourceInfoLayoutProps {
-  resources: ResourcesProps[];
+export interface TagListProps {
+  items: string[] | ResourcesProps[];
+  type: 'status' | 'resource';
+  maxVisible?: number;
 }
 
 export interface ReservationProps {
   name: string;
   setIsOpen: () => void;
+}
+
+export interface ReseravationCardProps {
+  id: number;
+  type: string;
+  imageUrl: string | null;
+  name: string;
+  description: string;
+  price: string;
+  status: string;
+  capacity: number;
+  spaceResources: ResourcesProps[];
+  startTime: Date;
 }
 
 export interface ProtectedRouteProps {
@@ -33,7 +48,7 @@ export interface ProtectedRouteProps {
 export interface CounterProps {
   icon: React.ReactNode;
   title: string;
-  count: string;
+  count: string | number;
   color: string;
 }
 
@@ -50,7 +65,5 @@ export interface UserReservationsProps {
   startTime: Date;
   endTime: Date;
   status: string;
-  createdAt: string;
-  updatedAt: string;
   space: SpaceCardProps;
 }

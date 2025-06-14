@@ -7,7 +7,7 @@ export function Header() {
   const navigate = useNavigate();
 
   return (
-    <div className='overflow-hidden'>
+    <div className='bg-white overflow-hidden'>
       <nav className='flex items-center justify-between p-4 border-b border-b-amber-50'>
         <div className='flex items-center gap-2 cursor-pointer' onClick={() => navigate('/')}>
           <CalendarDays color='blue' size='1.6rem' />

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getSpaces } from '../../service/api';
+import { getSpaces } from '../../services/api';
 import { SpaceCard } from '../SpaceCard';
 import { type SpaceCardProps } from '../../interfaces/components';
 import { Search } from '../Search';
@@ -41,30 +41,24 @@ export function Space() {
   const handleSpaceType = (type: string) => setSpaceType(type);
 
   return (
-    <section>
-      <div>
-        <div className='p-4 flex flex-col gap-6'>
-          <div>
-            <Search onChangeSearchTerm={setSearchTerm} onChangeSpaceType={handleSpaceType} spaces={spaces} />
-          </div>
+    <section className='p-4 sm:p-0'>
+      <div className='w-full flex flex-col gap-8'>
+        <Search onChangeSearchTerm={setSearchTerm} onChangeSpaceType={handleSpaceType} spaces={spaces} />
 
-          <div>
-            <div className='flex flex-col sm:flex-row flex-wrap gap-4'>
-              {filteredSpaces.map((space, index) => (
-                <SpaceCard
-                  key={index}
-                  type={space.type}
-                  imageUrl={space.imageUrl}
-                  name={space.name}
-                  price={space.price}
-                  description={space.description}
-                  capacity={space.capacity}
-                  spaceResources={space.spaceResources}
-                  isAvailable={space.isAvailable}
-                />
-              ))}
-            </div>
-          </div>
+        <div className='flex flex-col md:flex-row md:flex-wrap gap-4 mb-4 justify-center'>
+          {filteredSpaces.map((space, index) => (
+            <SpaceCard
+              key={index}
+              type={space.type}
+              imageUrl={space.imageUrl}
+              name={space.name}
+              price={space.price}
+              description={space.description}
+              capacity={space.capacity}
+              spaceResources={space.spaceResources}
+              isAvailable={space.isAvailable}
+            />
+          ))}
         </div>
       </div>
     </section>

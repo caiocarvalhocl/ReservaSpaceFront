@@ -5,7 +5,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
-      {children}
+      <div className='w-full sm:w-10/12 flex mx-auto max-w-full'>{children}</div>
       <Footer />
     </>
   );

@@ -5,14 +5,6 @@ import { AuthActions } from './authActions';
 export function authReducer(state: AuthStateModel, action: AuthActionsModel) {
   switch (action.type) {
     case AuthActions.LOGIN:
-      console.log('Estado Atual ', state);
-      console.log();
-      console.log('Estado atualizado', {
-        ...state,
-        user: action.payload.user,
-        token: action.payload.token,
-        isLoggedIn: true,
-      });
       return {
         ...state,
         user: action.payload.user,
