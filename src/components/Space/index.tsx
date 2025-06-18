@@ -45,10 +45,11 @@ export function Space() {
       <div className='w-full flex flex-col gap-8'>
         <Search onChangeSearchTerm={setSearchTerm} onChangeSpaceType={handleSpaceType} spaces={spaces} />
 
-        <div className='flex flex-col md:flex-row md:flex-wrap gap-4 mb-4 justify-center'>
+        <div className='flex flex-wrap justify-center gap-4 mb-4'>
           {filteredSpaces.map((space, index) => (
             <SpaceCard
               key={index}
+              id={space.id}
               type={space.type}
               imageUrl={space.imageUrl}
               name={space.name}

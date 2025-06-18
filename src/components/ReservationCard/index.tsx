@@ -4,13 +4,13 @@ import { spaceTypeMap } from '../../types/components';
 import type { ReseravationCardProps } from '../../interfaces/components';
 import { TagList } from '../TagList';
 
-export function ReservationCard({ id, imageUrl, name, description, type, price, capacity, spaceResources, status, startTime }: ReseravationCardProps) {
-  const formattedDate = new Date(startTime).toLocaleDateString();
+export function ReservationCard({ id, imageUrl, name, description, type, price, capacity, spaceResources, status, startTime, endTime }: ReseravationCardProps) {
+  const formattedDate = status === 'cancelada' && endTime ? new Date(endTime).toLocaleDateString() : new Date(startTime).toLocaleDateString();
 
   return (
     <div className='w-full md:min-w-full flex flex-col justify-between'>
       <div className='flex flex-col md:flex-row'>
-        <div className='relative flex justify-center items-center bg-gray-400 w-full min-h-60 p-4 rounded-t-lg md:rounded-tr-none md:rounded-bl-lg md:max-w-1/2'>
+        <div className='relative flex justify-center items-center bg-gray-400 w-full min-h-60 p-4 rounded-t-lg md:rounded-tr-none md:rounded-bl-lg md:max-w-1/2 lg:max-w-1/3'>
           <div>{imageUrl !== null ? <img src={imageUrl} alt='Picture' className='object-cover' /> : <ImageOff />}</div>
 
           <div className='absolute inset-4 w-fit h-fit'></div>
@@ -24,7 +24,7 @@ export function ReservationCard({ id, imageUrl, name, description, type, price, 
           </div>
         </div>
 
-        <div className='w-full flex flex-col gap-4 p-4 bg-white rounded-b-lg md:max-w-1/2'>
+        <div className='w-full flex flex-col gap-4 p-4 bg-white rounded-b-lg'>
           <div className='flex max-w-full items-center overflow-hidden'>
             <div className='flex flex-col gap-1'>
               <h3 className='font-semibold text-2xl sm:text-3xl'>{name}</h3>
@@ -58,16 +58,16 @@ export function ReservationCard({ id, imageUrl, name, description, type, price, 
 
           <div>
             <div className='flex flex-wrap gap-2'>
-              <div className='flex items-center gap-2 outline w-fit p-2 outline-gray-300 rounded-md cursor-pointer'>
+              <button className='flex items-center gap-2 outline w-fit p-2 outline-gray-300 rounded-md cursor-pointer hover:bg-black hover:text-white'>
                 <Eye className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />
                 <span className='font-semibold text-lg sm:text-2xl'>Detalhes</span>
-              </div>
+              </button>
 
               {status === 'confirmada' && (
-                <div className='flex items-center gap-2 outline w-fit p-2 outline-gray-300 rounded-md cursor-pointer'>
-                  <Trash2 color='red' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />
-                  <span className='text-red-500 font-semibold text-xl sm:text-2xl'>Cancelar</span>
-                </div>
+                <button className='flex items-center gap-2 outline w-fit p-2 outline-gray-300 rounded-md cursor-pointer text-red-500 hover:bg-red-500 hover:text-white hover:outline-red-500'>
+                  <Trash2 className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />
+                  <span className='font-semibold text-xl sm:text-2xl'>Cancelar</span>
+                </button>
               )}
             </div>
           </div>

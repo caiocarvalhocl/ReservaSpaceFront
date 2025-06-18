@@ -1,8 +1,8 @@
 import { X } from 'lucide-react';
-import type { ReservationProps } from '../../interfaces/components/index.ts';
-import { ReservationForm } from '../Form/ReservationForm';
+import type { BookProps } from '../../interfaces/components/index.ts';
+import { BookForm } from '../Form/BookForm/index.tsx';
 
-export function Reservation({ setIsOpen, name }: ReservationProps) {
+export function Book({ setIsOpen, name, spaceId }: BookProps) {
   return (
     <div className='fixed inset-0 flex items-center justify-center z-50'>
       <div className='absolute h-full w-full bg-black opacity-70'></div>
@@ -16,11 +16,9 @@ export function Reservation({ setIsOpen, name }: ReservationProps) {
             </div>
           </div>
 
-          <p className='text-gray-400 text-xl'>
-            Selecione a data e horario para sua reserva
-          </p>
+          <p className='text-gray-400 text-xl'>Selecione as datas e horario para sua reserva</p>
 
-          <ReservationForm />
+          <BookForm spaceId={spaceId} onSuccess={setIsOpen} />
         </div>
       </div>
     </div>

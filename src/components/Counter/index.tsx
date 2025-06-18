@@ -12,7 +12,7 @@ export function Counter({ title, count, icon, color }: CounterProps) {
   const textColorClass = colorMap[color] || 'text-black';
 
   return (
-    <div className='bg-white p-6 outline outline-gray-300 w-full md:max-w-sm rounded-lg'>
+    <div className='bg-white p-6 outline outline-gray-300 w-full md:max-w-sm 2xl:max-w-lg rounded-lg'>
       <div className='flex items-center'>
         <div className='flex flex-col gap-2 w-fit items-start'>
           <h2 className='text-xl md:text-base lg:text-xl text-gray-600'>{title}</h2>

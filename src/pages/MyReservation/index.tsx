@@ -39,11 +39,11 @@ export function MyReservation() {
 
   const handleSpaceType = (type: string) => setSpaceType(type);
 
-  const counters = getCounters({ filteredReservations });
+  const counters = getCounters({ counterType: 'reservations', counter: filteredReservations });
 
   return (
     <Layout>
-      <div className='min-h-screen mx-auto'>
+      <div className='w-full xl:max-w-9/12 mx-auto'>
         <div className='p-6'>
           <div className='flex flex-col gap-2'>
             <h1 className='text-5xl lg:text-7xl font-bold'>Minhas Reservas</h1>
@@ -61,21 +61,28 @@ export function MyReservation() {
 
           <div>
             <div className='flex flex-col sm:flex-row flex-wrap gap-4'>
-              {filteredReservations.map((reservation, index) => (
-                <ReservationCard
-                  key={index}
-                  id={reservation.id}
-                  type={reservation.space.type}
-                  imageUrl={reservation.space.imageUrl}
-                  name={reservation.space.name}
-                  price={reservation.space.price}
-                  description={reservation.space.description}
-                  capacity={reservation.space.capacity}
-                  spaceResources={reservation.space.spaceResources}
-                  status={reservation.status}
-                  startTime={reservation.startTime}
-                />
-              ))}
+              {filteredReservations.length > 0 ? (
+                filteredReservations.map((reservation, index) => (
+                  <ReservationCard
+                    key={index}
+                    id={reservation.id}
+                    type={reservation.space.type}
+                    imageUrl={reservation.space.imageUrl}
+                    name={reservation.space.name}
+                    price={reservation.space.price}
+                    description={reservation.space.description}
+                    capacity={reservation.space.capacity}
+                    spaceResources={reservation.space.spaceResources}
+                    status={reservation.status}
+                    startTime={reservation.startTime}
+                    endTime={reservation.endTime}
+                  />
+                ))
+              ) : (
+                <div className='m-auto'>
+                  <p>Voce nao tem reservas</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

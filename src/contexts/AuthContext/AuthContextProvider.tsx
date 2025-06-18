@@ -91,6 +91,7 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
   };
 
   const logout = () => {
+    localStorage.removeItem('tokenExpiry');
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     dispatch({ type: AuthActions.LOGOUT });

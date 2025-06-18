@@ -4,6 +4,7 @@ import { Login } from '../pages/Auth/Login';
 import { Register } from '../pages/Auth/Register';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { MyReservation } from '../pages/MyReservation';
+import { MySpaces } from '../pages/MySpaces';
 
 export function MainRoutes() {
   return (
@@ -20,6 +21,16 @@ export function MainRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path='/myspaces'
+          element={
+            <ProtectedRoute>
+              <MySpaces />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path='*' element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

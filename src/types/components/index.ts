@@ -6,3 +6,13 @@ export const spaceTypeMap: Record<string, string> = {
   sports_court: 'Quadra Esportiva',
   meeting_room: 'Sala de Reunião',
 };
+
+export const rolesMap: Record<string, string> = {
+  admin: 'admin',
+  manager: 'manager',
+  regular: 'regular',
+};
+
+export type LastReservation = {
+  createdAt: string;
+};

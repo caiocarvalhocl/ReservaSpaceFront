@@ -8,3 +8,13 @@ export interface LoginResponse {
 export interface RegisterResponse {
   user: UserInfo;
 }
+
+export interface BookBody {
+  spaceId: number;
+  startTime: string;
+  endTime: string;
+}
+
+export interface BookResponse {
+  message: string;
+}

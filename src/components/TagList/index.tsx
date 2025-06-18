@@ -19,7 +19,7 @@ export function TagList({ items, type = 'status', maxVisible = 2 }: TagListProps
               {items.slice(0, maxVisible).map((item, index) => (
                 <li
                   key={index}
-                  className={`rounded-full ${type === 'status' ? 'bg-blue-200 text-blue-900' : 'bg-gray-200 text-black '} px-3 py-1 text-base capitalize sm:text-xl text-center flex items-center font-semibold max-w-[120px] sm:max-w-[150px] truncate`}
+                  className={`rounded-full ${type === 'status' ? 'bg-blue-200 text-blue-900' : 'bg-gray-200 text-black'} px-3 py-1 text-base capitalize sm:text-lg text-center flex items-center font-semibold max-w-[120px] sm:max-w-[150px] truncate`}
                 >
                   {handleItemType(item)}
                 </li>

@@ -1,12 +1,19 @@
+import type { LastReservation } from '../../types/components';
+
 export interface SpaceCardProps {
+  id: number;
   type: string;
   imageUrl: string | null;
   name: string;
   description: string;
   price: string;
-  isAvailable: boolean;
   capacity: number;
-  spaceResources: ResourcesProps[];
+  reservations: LastReservation[];
+  spaceResources?: ResourcesProps[];
+  isAvailable?: boolean;
+  status?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ResourcesProps {
@@ -23,9 +30,10 @@ export interface TagListProps {
   maxVisible?: number;
 }
 
-export interface ReservationProps {
+export interface BookProps {
   name: string;
   setIsOpen: () => void;
+  spaceId: number;
 }
 
 export interface ReseravationCardProps {
@@ -39,6 +47,7 @@ export interface ReseravationCardProps {
   capacity: number;
   spaceResources: ResourcesProps[];
   startTime: Date;
+  endTime: Date;
 }
 
 export interface ProtectedRouteProps {

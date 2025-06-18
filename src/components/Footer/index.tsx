@@ -10,9 +10,7 @@ export function Footer() {
               <CalendarDays className='w-6 h-6' />
               <span className='text-lg font-bold'>ReservaSpace</span>
             </div>
-            <p className='text-gray-400'>
-              Plataforma completa para reserva de espaços coletivos.
-            </p>
+            <p className='text-gray-400'>Plataforma completa para reserva de espaços coletivos.</p>
           </div>
           <div>
             <h3 className='font-semibold mb-4'>Espaços</h3>
@@ -35,9 +33,9 @@ export function Footer() {
           <div>
             <h3 className='font-semibold mb-4'>Contato</h3>
             <div className='space-y-2 text-gray-400 overflow-x-clip'>
-              <p>📧 caioalmeidacarvalholima@gmail.com</p>
-              <p>📞 (99) 98124-9825</p>
-              <p>📍 Dois Vizinhos, PR</p>
+              <p>contato@gmail.com</p>
+              <p>(99) 98124-9825</p>
+              <p>Dois Vizinhos, PR</p>
             </div>
           </div>
         </div>

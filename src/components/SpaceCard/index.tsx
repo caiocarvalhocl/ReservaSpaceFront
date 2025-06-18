@@ -1,18 +1,18 @@
 import { ImageOff } from 'lucide-react';
 import { Users } from 'lucide-react';
 import { spaceTypeMap } from '../../types/components';
-import { Reservation } from '../Reservation';
 import { useState } from 'react';
 import type { SpaceCardProps } from '../../interfaces/components';
 import { TagList } from '../TagList';
+import { Book } from '../Book';
 
-export function SpaceCard({ imageUrl, name, description, type, price, capacity, spaceResources, isAvailable }: SpaceCardProps) {
-  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
+export function SpaceCard({ id, imageUrl, name, description, type, price, capacity, spaceResources, isAvailable }: SpaceCardProps) {
+  const [isBookModalOpen, setIsBookModalOpen] = useState(false);
 
-  const handleIsReservationModal = () => setIsReservationModalOpen(prev => !prev);
+  const handleIsBookModal = () => setIsBookModalOpen(prev => !prev);
 
   return (
-    <div className='w-full md:max-w-[31.5rem] lg:max-w-xl'>
+    <div className='w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1rem)] flex-shrink-0'>
       <div>
         <div className='relative flex justify-center items-center bg-gray-400 w-full min-h-60 p-4 rounded-t-lg'>
           <div>{imageUrl !== null ? <img src={imageUrl} alt='Picture' className='object-cover' /> : <ImageOff />}</div>
@@ -44,7 +44,7 @@ export function SpaceCard({ imageUrl, name, description, type, price, capacity, 
 
           <div>
             <div className='flex gap-2'>
-              <Users size={18} />
+              <Users className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />
               <p className='text-xl sm:text-2xl'>Capacidade: {capacity} pessoas</p>
             </div>
           </div>
@@ -57,14 +57,14 @@ export function SpaceCard({ imageUrl, name, description, type, price, capacity, 
             <button
               className={`bg-black text-white w-full p-2 font-bold text-2xl rounded-md ${isAvailable ? 'cursor-pointer' : 'bg-gray-500'}`}
               disabled={!isAvailable}
-              onClick={handleIsReservationModal}
+              onClick={handleIsBookModal}
             >
               {isAvailable ? <>Reservar Agora</> : <>Indisponível</>}
             </button>
           </div>
         </div>
 
-        {isReservationModalOpen && <Reservation setIsOpen={handleIsReservationModal} name={name} />}
+        {isBookModalOpen && <Book spaceId={id} setIsOpen={handleIsBookModal} name={name} />}
       </div>
     </div>
   );
