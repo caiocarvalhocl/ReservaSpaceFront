@@ -2,17 +2,19 @@ import { Counter } from '../../components/Counter';
 import { Layout } from '../../components/Layout';
 import { Search } from '../../components/Search';
 import { useEffect, useState } from 'react';
-import type { UserReservationsProps } from '../../interfaces/components';
+import type { FilterField, ResourcesProps, UserReservationsProps } from '../../interfaces/components';
 import { getMyReservations } from '../../services/api';
 import { ReservationCard } from '../../components/ReservationCard';
 import { getCounters } from '../../utils/getCounters';
+import { reservationStatusMap } from '../../types/components';
 
 export function MyReservation() {
   const [reservations, setReservations] = useState<UserReservationsProps[]>([]);
   const [filteredReservations, setFilteredReservations] = useState<UserReservationsProps[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [spaceType, setSpaceType] = useState('all');
-
+  const [currentFilters, setCurrentFilters] = useState<Record<string, string>>({
+    searchTerm: '',
+    status: 'all',
+  });
   useEffect(() => {
     const fetchReservations = async () => {
       const data = await getMyReservations();
@@ -26,18 +28,38 @@ export function MyReservation() {
   useEffect(() => {
     let filtered = reservations;
 
-    if (spaceType !== 'all') {
-      filtered = filtered.filter(res => res.space.type === spaceType);
+    if (currentFilters.status !== 'all') {
+      filtered = filtered.filter(reservation => reservation.status === currentFilters.status);
     }
 
-    if (searchTerm.trim() !== '') {
-      filtered = filtered.filter(res => res.space.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    if (currentFilters.searchTerm.trim() !== '') {
+      filtered = filtered.filter(reservation => reservation.space.name.toLowerCase().includes(currentFilters.searchTerm.toLowerCase()));
     }
 
     setFilteredReservations(filtered);
-  }, [spaceType, searchTerm, reservations]);
+  }, [currentFilters, reservations]);
 
-  const handleSpaceType = (type: string) => setSpaceType(type);
+  const handleFilterChange = (fieldName: string, value: string) => {
+    setCurrentFilters(prevFilters => ({
+      ...prevFilters,
+      [fieldName]: value,
+    }));
+  };
+
+  const reservationFilterFields: FilterField[] = [
+    {
+      name: 'searchTerm',
+      label: 'Buscar reservas',
+      type: 'text',
+      placeholder: 'Digite o nome do espaços...',
+    },
+    {
+      name: 'status',
+      label: 'Status',
+      type: 'select',
+      options: [{ value: 'all', label: 'Todos' }, ...Object.entries(reservationStatusMap).map(([value, label]) => ({ value, label: label as string }))],
+    },
+  ];
 
   const counters = getCounters({ counterType: 'reservations', counter: filteredReservations });
 
@@ -56,7 +78,7 @@ export function MyReservation() {
           </div>
 
           <div className='my-6'>
-            <Search onChangeSearchTerm={setSearchTerm} onChangeSpaceType={handleSpaceType} spaces={reservations.map(reservation => reservation.space)} />
+            <Search filters={reservationFilterFields} onFilterChange={handleFilterChange} />
           </div>
 
           <div>
@@ -72,7 +94,7 @@ export function MyReservation() {
                     price={reservation.space.price}
                     description={reservation.space.description}
                     capacity={reservation.space.capacity}
-                    spaceResources={reservation.space.spaceResources}
+                    spaceResources={reservation.space.spaceResources as ResourcesProps[]}
                     status={reservation.status}
                     startTime={reservation.startTime}
                     endTime={reservation.endTime}

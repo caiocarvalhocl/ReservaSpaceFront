@@ -2,7 +2,7 @@ import { ImageOff } from 'lucide-react';
 import { Users } from 'lucide-react';
 import { spaceTypeMap } from '../../types/components';
 import { useState } from 'react';
-import type { SpaceCardProps } from '../../interfaces/components';
+import type { ResourcesProps, SpaceCardProps } from '../../interfaces/components';
 import { TagList } from '../TagList';
 import { Book } from '../Book';
 
@@ -50,7 +50,7 @@ export function SpaceCard({ id, imageUrl, name, description, type, price, capaci
           </div>
 
           <div className='flex items-center py-2'>
-            <TagList items={spaceResources} type='resource' />
+            <TagList items={spaceResources as ResourcesProps[]} type='resource' />
           </div>
 
           <div>

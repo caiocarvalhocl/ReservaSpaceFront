@@ -1,8 +1,10 @@
-import { CalendarDays, ChartColumnIncreasing, CircleCheckBig, DollarSign, Loader, Star } from 'lucide-react';
+import { Activity, CalendarDays, ChartColumnIncreasing, CircleCheckBig, DollarSign, Loader, Star, UserRoundCheck, Users } from 'lucide-react';
 import type { SpaceCardProps, UserReservationsProps } from '../interfaces/components';
+import type { UserInfo } from '../interfaces/auth/user';
 
 export function getCounters(props: { counterType: 'spaces'; counter: SpaceCardProps[] }): any[];
 export function getCounters(props: { counterType: 'reservations'; counter: UserReservationsProps[] }): any[];
+export function getCounters(props: { counterType: 'users'; counter: UserInfo[] }): any[];
 
 export function getCounters({ counterType, counter }: { counterType: string; counter: any[] }) {
   const currentMonth = new Date().getMonth();
@@ -15,7 +17,7 @@ export function getCounters({ counterType, counter }: { counterType: string; cou
         count: `R$${(counter as SpaceCardProps[])
           .filter(item => {
             const date = new Date();
-            return date.getMonth() === currentMonth && date.getFullYear() === currentYear && item.status !== 'cancelada';
+            return date.getMonth() === currentMonth && date.getFullYear() === currentYear && item.status !== 'canceled';
           })
           .reduce((acc, item) => acc + +item.price, 0)
           .toFixed(2)}`,
@@ -24,7 +26,7 @@ export function getCounters({ counterType, counter }: { counterType: string; cou
       },
       {
         title: 'Total de Reservas',
-        count: (counter as SpaceCardProps[]).reduce((acc, item) => (item.status === 'concluida' ? acc + 1 : acc), 0),
+        count: (counter as SpaceCardProps[]).reduce((acc, item) => (item.status === 'completed' ? acc + 1 : acc), 0),
         icon: <CalendarDays color='blue' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'blue',
       },
@@ -36,7 +38,7 @@ export function getCounters({ counterType, counter }: { counterType: string; cou
       },
       {
         title: 'Espaços ativos',
-        count: (counter as SpaceCardProps[]).reduce((acc, item) => (item.status === 'pendente' ? acc + 1 : acc), 0),
+        count: (counter as SpaceCardProps[]).reduce((acc, item) => (item.status === 'pending' ? acc + 1 : acc), 0),
         icon: <CircleCheckBig color='red' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'red',
       },
@@ -53,19 +55,19 @@ export function getCounters({ counterType, counter }: { counterType: string; cou
       },
       {
         title: 'Concluidas',
-        count: (counter as UserReservationsProps[]).reduce((acc, item) => (item.status === 'concluida' ? acc + 1 : acc), 0),
+        count: (counter as UserReservationsProps[]).reduce((acc, item) => (item.status === 'completed' ? acc + 1 : acc), 0),
         icon: <Star color='green' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'green',
       },
       {
         title: 'Pendentes',
-        count: (counter as UserReservationsProps[]).reduce((acc, item) => (item.status === 'pendente' ? acc + 1 : acc), 0),
+        count: (counter as UserReservationsProps[]).reduce((acc, item) => (item.status === 'pending' ? acc + 1 : acc), 0),
         icon: <Loader color='cyan' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'cyan',
       },
       {
         title: 'Confirmadas',
-        count: (counter as UserReservationsProps[]).reduce((acc, item) => (item.status === 'confirmada' ? acc + 1 : acc), 0),
+        count: (counter as UserReservationsProps[]).reduce((acc, item) => (item.status === 'confirmed' ? acc + 1 : acc), 0),
         icon: <CircleCheckBig color='blue' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'blue',
       },
@@ -74,12 +76,37 @@ export function getCounters({ counterType, counter }: { counterType: string; cou
         count: `R$${(counter as UserReservationsProps[])
           .filter(item => {
             const date = new Date(item.startTime);
-            return date.getMonth() === currentMonth && date.getFullYear() === currentYear && item.status !== 'cancelada';
+            return date.getMonth() === currentMonth && date.getFullYear() === currentYear && item.status !== 'canceled';
           })
           .reduce((acc, item) => acc + +item.space.price, 0)
           .toFixed(2)}`,
         icon: <CalendarDays color='purple' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'purple',
+      },
+    ];
+    return reservationCounters;
+  }
+
+  if (counterType === 'users') {
+    const reservationCounters = [
+      {
+        title: 'Total',
+        count: counter.length,
+        icon: <Users color='blue' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
+        color: 'blue',
+      },
+      {
+        title: 'Usuarios Ativos',
+        count: (counter as UserInfo[]).reduce((acc, item) => (item.status === 'active' ? acc + 1 : acc), 0),
+        icon: <UserRoundCheck color='green' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
+        color: 'green',
+      },
+
+      {
+        title: 'Media de Reservas',
+        count: 0,
+        icon: <Activity color='red' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
+        color: 'red',
       },
     ];
     return reservationCounters;

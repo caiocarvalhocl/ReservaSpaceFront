@@ -1,4 +1,5 @@
 import type { ResourcesProps, TagListProps } from '../../interfaces/components';
+import { reservationStatusMap, type ReservationStatus } from '../../types/components';
 
 export function TagList({ items, type = 'status', maxVisible = 2 }: TagListProps) {
   const handleItemType = (item: any) => {
@@ -7,7 +8,7 @@ export function TagList({ items, type = 'status', maxVisible = 2 }: TagListProps
       return resourceItem.resource.name;
     }
 
-    return item as string;
+    return reservationStatusMap[item as ReservationStatus] as string;
   };
 
   return (

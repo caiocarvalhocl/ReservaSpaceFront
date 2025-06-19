@@ -5,7 +5,7 @@ import type { ReseravationCardProps } from '../../interfaces/components';
 import { TagList } from '../TagList';
 
 export function ReservationCard({ id, imageUrl, name, description, type, price, capacity, spaceResources, status, startTime, endTime }: ReseravationCardProps) {
-  const formattedDate = status === 'cancelada' && endTime ? new Date(endTime).toLocaleDateString() : new Date(startTime).toLocaleDateString();
+  const formattedDate = status === 'canceled' && endTime ? new Date(endTime).toLocaleDateString() : new Date(startTime).toLocaleDateString();
 
   return (
     <div className='w-full md:min-w-full flex flex-col justify-between'>
@@ -63,7 +63,7 @@ export function ReservationCard({ id, imageUrl, name, description, type, price, 
                 <span className='font-semibold text-lg sm:text-2xl'>Detalhes</span>
               </button>
 
-              {status === 'confirmada' && (
+              {status === 'confirmed' && (
                 <button className='flex items-center gap-2 outline w-fit p-2 outline-gray-300 rounded-md cursor-pointer text-red-500 hover:bg-red-500 hover:text-white hover:outline-red-500'>
                   <Trash2 className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />
                   <span className='font-semibold text-xl sm:text-2xl'>Cancelar</span>

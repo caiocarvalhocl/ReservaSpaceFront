@@ -29,7 +29,7 @@ export function Header() {
   const menuNavigations: NavItem[] = [
     {
       path: '/users',
-      title: 'Usuarios do sistema',
+      title: 'Usuários do Sistema',
       minRole: 'admin',
       loggedInOnly: true,
     },

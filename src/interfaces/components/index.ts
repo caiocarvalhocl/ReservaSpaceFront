@@ -1,4 +1,5 @@
-import type { LastReservation, UserRole } from '../../types/components';
+import type { FilterFieldType, LastReservation, UserRole } from '../../types/components';
+import type { UserInfo } from '../auth/user';
 
 export interface NavItem {
   path: string;
@@ -19,7 +20,7 @@ export interface SpaceCardProps {
   description: string;
   price: string;
   capacity: number;
-  reservations: LastReservation[];
+  reservations?: LastReservation[];
   spaceResources?: ResourcesProps[];
   isAvailable?: boolean;
   status?: string;
@@ -63,6 +64,7 @@ export interface ReseravationCardProps {
 
 export interface ProtectedRouteProps {
   children?: React.ReactNode;
+  minRole: UserRole;
 }
 
 export interface CounterProps {
@@ -72,10 +74,17 @@ export interface CounterProps {
   color: string;
 }
 
+export interface FilterField {
+  name: string;
+  label: string;
+  type: FilterFieldType;
+  placeholder?: string;
+  options?: { value: string; label: string }[];
+}
+
 export interface SearchProps {
-  spaces: SpaceCardProps[];
-  onChangeSpaceType: (value: string) => void;
-  onChangeSearchTerm: (value: string) => void;
+  filters: FilterField[];
+  onFilterChange: (fieldName: string, value: string) => void;
 }
 
 export interface UserReservationsProps {
@@ -86,4 +95,11 @@ export interface UserReservationsProps {
   endTime: Date;
   status: string;
   space: SpaceCardProps;
+}
+
+export interface UserCardProps {
+  userInfo: UserInfo;
+  fields: string[];
+  onChangeCheckBox: (id: number, isChecked: boolean) => void;
+  isSelected: boolean;
 }

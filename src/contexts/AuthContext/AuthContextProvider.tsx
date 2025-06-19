@@ -10,6 +10,7 @@ const initialState: AuthStateModel = {
   user: null,
   token: null,
   isLoggedIn: false,
+  isLoading: true,
 };
 
 export function AuthContextProvider({ children }: { children: React.ReactNode }) {

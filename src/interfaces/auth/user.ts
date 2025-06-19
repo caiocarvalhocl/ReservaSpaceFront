@@ -5,12 +5,15 @@ export interface UserInfo {
   id: number;
   name: string;
   role: string;
+  email?: string;
+  status?: string;
 }
 
 export interface AuthStateModel {
   user: UserInfo | null;
   token: string | null;
   isLoggedIn: boolean;
+  isLoading: boolean;
 }
 
 export interface AuthContextProps {

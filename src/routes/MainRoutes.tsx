@@ -5,6 +5,7 @@ import { Register } from '../pages/Auth/Register';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { MyReservation } from '../pages/MyReservation';
 import { MySpaces } from '../pages/MySpaces';
+import { SystemUsers } from '../pages/SystemUsers';
 
 export function MainRoutes() {
   return (
@@ -16,7 +17,7 @@ export function MainRoutes() {
         <Route
           path='/myreservations'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute minRole='regular'>
               <MyReservation />
             </ProtectedRoute>
           }
@@ -24,12 +25,22 @@ export function MainRoutes() {
         <Route
           path='/myspaces'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute minRole='manager'>
               <MySpaces />
             </ProtectedRoute>
           }
         />
 
+        <Route
+          path='/users'
+          element={
+            <ProtectedRoute minRole='admin'>
+              <SystemUsers />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path='/unauthorized' element={<></>} />
         <Route path='*' element={<Home />} />
       </Routes>
     </BrowserRouter>

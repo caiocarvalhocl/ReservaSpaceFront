@@ -1,18 +1,18 @@
 import { CircleX, Edit, Ellipsis, Eye, ImageOff, Trash, Users } from 'lucide-react';
 import type { SpaceCardProps } from '../../interfaces/components';
 import { useState } from 'react';
-import { ICON_BASE_CLASSNAME } from '../../utils/constants';
+import { SPACE_COLOR_STATUS_MAP, ICON_BASE_CLASSNAME } from '../../utils/constants';
 
 export function MySpaceCard({ imageUrl, name, description, status, price, capacity, reservations }: SpaceCardProps) {
   const [submenuOpen, setSubmenuOpen] = useState(false);
 
-  const colorStatusMap: Record<string, string> = {
-    ativo: 'bg-green-200 text-green-800',
-    manutenção: 'bg-yellow-100 text-yellow-800',
-    inativo: 'bg-gray-100 text-black',
+  const formattedStatusText: Record<string, string> = {
+    active: 'ativo',
+    maintenance: 'manutencao',
+    inactive: 'inativo',
   };
 
-  const formattedLastReservation = reservations.length > 0 ? new Date(reservations[0].createdAt).toLocaleDateString() : undefined;
+  const formattedLastReservation = reservations && reservations.length > 0 ? new Date(reservations[0].createdAt).toLocaleDateString() : undefined;
 
   return (
     <div className='w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1rem)] flex-shrink-0'>
@@ -21,7 +21,9 @@ export function MySpaceCard({ imageUrl, name, description, status, price, capaci
           <div>{imageUrl !== null ? <img src={imageUrl} alt='Picture' className='object-cover' /> : <ImageOff />}</div>
 
           <div className='absolute inset-4 w-fit h-fit'>
-            <span className={`capitalize text-base sm:text-xl font-semibold px-3 py-1 rounded-full self-start ${colorStatusMap[status || 'inativo']}`}>{status}</span>
+            <span className={`capitalize text-base sm:text-xl font-semibold px-3 py-1 rounded-full self-start ${SPACE_COLOR_STATUS_MAP[status || 'inactive']}`}>
+              {formattedStatusText[status || 'inactive']}
+            </span>
           </div>
 
           <div className='absolute inset-4 ml-auto w-fit h-fit'>
@@ -94,7 +96,7 @@ export function MySpaceCard({ imageUrl, name, description, status, price, capaci
 
           <div className='flex items-center py-2'>
             <div className='ml-auto'>
-              {reservations.length > 0 ? (
+              {reservations && reservations.length > 0 ? (
                 <p className='text-base text-gray-500'>Última reserva: {formattedLastReservation}</p>
               ) : (
                 <p className='text-base text-gray-500'>Nunca reservado</p>

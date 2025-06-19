@@ -2,7 +2,7 @@ import type { AxiosResponse } from 'axios';
 import { api } from './axios';
 import type { SpaceCardProps, UserReservationsProps } from '../../interfaces/components';
 import type { BookBody, BookResponse } from '../../interfaces/services';
-import type { MySpacesResponse } from '../../types/services';
+import type { MySpacesResponse, UserResponse } from '../../types/services';
 
 export async function getMyReservations() {
   const response: AxiosResponse<UserReservationsProps[]> = await api.get(`api/reservations/my`);
@@ -24,6 +24,12 @@ export async function book({ spaceId, startTime, endTime }: BookBody) {
 
 export async function getMySpaces() {
   const response: AxiosResponse<MySpacesResponse> = await api.get('/api/spaces/my');
+
+  return response.data;
+}
+
+export async function getAllUsers() {
+  const response: AxiosResponse<UserResponse> = await api.get('/api/users/');
 
   return response.data;
 }

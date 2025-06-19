@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 import { getSpaces } from '../../services/api';
 import { SpaceCard } from '../SpaceCard';
-import { type SpaceCardProps } from '../../interfaces/components';
+import { type FilterField, type SpaceCardProps } from '../../interfaces/components';
 import { Search } from '../Search';
+import { spaceTypeMap } from '../../types/components';
 
 export function Space() {
   const [spaces, setSpaces] = useState<SpaceCardProps[]>([]);
   const [filteredSpaces, setFilteredSpaces] = useState<SpaceCardProps[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [spaceType, setSpaceType] = useState('all');
+  const [currentFilters, setCurrentFilters] = useState<Record<string, string>>({
+    searchTerm: '',
+    spaceType: 'all',
+  });
 
   useEffect(() => {
     const fetchSpacesData = async () => {
@@ -27,23 +30,43 @@ export function Space() {
   useEffect(() => {
     let filtered = spaces;
 
-    if (spaceType !== 'all') {
-      filtered = filtered.filter(space => space.type === spaceType);
+    if (currentFilters.spaceType !== 'all') {
+      filtered = filtered.filter(space => space.type === currentFilters.spaceType);
     }
 
-    if (searchTerm.trim() !== '') {
-      filtered = filtered.filter(space => space.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    if (currentFilters.searchTerm.trim() !== '') {
+      filtered = filtered.filter(space => space.name.toLowerCase().includes(currentFilters.searchTerm.toLowerCase()));
     }
 
     setFilteredSpaces(filtered);
-  }, [spaceType, searchTerm, spaces]);
+  }, [currentFilters, spaces]);
 
-  const handleSpaceType = (type: string) => setSpaceType(type);
+  const handleFilterChange = (fieldName: string, value: string) => {
+    setCurrentFilters(prevFilters => ({
+      ...prevFilters,
+      [fieldName]: value,
+    }));
+  };
+
+  const spaceFilterFields: FilterField[] = [
+    {
+      name: 'searchTerm',
+      label: 'Buscar espaços',
+      type: 'text',
+      placeholder: 'Digite o nome do espaços...',
+    },
+    {
+      name: 'spaceType',
+      label: 'Tipo de espaço',
+      type: 'select',
+      options: [{ value: 'all', label: 'Todos' }, ...Object.entries(spaceTypeMap).map(([value, label]) => ({ value, label: label as string }))],
+    },
+  ];
 
   return (
     <section className='p-4 sm:p-0'>
       <div className='w-full flex flex-col gap-8'>
-        <Search onChangeSearchTerm={setSearchTerm} onChangeSpaceType={handleSpaceType} spaces={spaces} />
+        <Search filters={spaceFilterFields} onFilterChange={handleFilterChange} />
 
         <div className='flex flex-wrap justify-center gap-4 mb-4'>
           {filteredSpaces.map((space, index) => (

@@ -10,6 +10,7 @@ export function authReducer(state: AuthStateModel, action: AuthActionsModel) {
         user: action.payload.user,
         token: action.payload.token,
         isLoggedIn: true,
+        isLoading: false,
       };
     case AuthActions.LOGOUT:
       return {
@@ -17,6 +18,7 @@ export function authReducer(state: AuthStateModel, action: AuthActionsModel) {
         user: null,
         token: null,
         isLoggedIn: false,
+        isLoading: false,
       };
     case AuthActions.SET_USER_FROM_STORAGE:
       return {
@@ -24,6 +26,7 @@ export function authReducer(state: AuthStateModel, action: AuthActionsModel) {
         user: action.payload.user,
         token: action.payload.token,
         isLoggedIn: true,
+        isLoading: false,
       };
     default:
       return state;
