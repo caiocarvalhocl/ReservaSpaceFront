@@ -1,4 +1,15 @@
-import type { LastReservation } from '../../types/components';
+import type { LastReservation, UserRole } from '../../types/components';
+
+export interface NavItem {
+  path: string;
+  title: string;
+  minRole?: UserRole;
+  loggedInOnly?: boolean;
+  loggedOutOnly?: boolean;
+  onClick?: () => void;
+  isUserDisplay?: boolean;
+  isLogout?: boolean;
+}
 
 export interface SpaceCardProps {
   id: number;

@@ -7,12 +7,14 @@ export const spaceTypeMap: Record<string, string> = {
   meeting_room: 'Sala de Reunião',
 };
 
-export const rolesMap: Record<string, string> = {
-  admin: 'admin',
-  manager: 'manager',
-  regular: 'regular',
-};
-
 export type LastReservation = {
   createdAt: string;
+};
+
+export type UserRole = 'admin' | 'manager' | 'regular';
+
+export const roleHierarchy: Record<UserRole, number> = {
+  regular: 0,
+  manager: 1,
+  admin: 2,
 };
