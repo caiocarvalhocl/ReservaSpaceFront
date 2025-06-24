@@ -12,7 +12,7 @@ export function Header() {
   const [showLogout, setShowLogout] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const userRole: UserRole = state.user ? (state.user.role as UserRole) : 'regular';
+  const userRole: UserRole = state.user?.role as UserRole | 'regular';
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -53,7 +53,7 @@ export function Header() {
 
     {
       path: '#',
-      title: state.user ? state.user.name : 'Usuário',
+      title: state.user?.name as string | 'Usuário',
       loggedInOnly: true,
       isUserDisplay: true,
     },

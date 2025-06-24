@@ -1,24 +1,29 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Layout } from '../../components/Layout';
 import type { UserInfo } from '../../interfaces/auth/user';
-import { getAllUsers } from '../../services/api';
+import { getAllUsers, updateMultipleUsers } from '../../services/api';
 import { getCounters } from '../../utils/getCounters';
 import { Counter } from '../../components/Counter';
 import { Search } from '../../components/Search';
 import type { FilterField } from '../../interfaces/components';
 import { userRolesMap, userStatusMap } from '../../types/components';
 import { UserCard } from '../../components/UserCard';
+import { useAuth } from '../../hooks/useAuth';
+import { UserForm } from '../../components/Form/UserForm';
 
 export function SystemUsers() {
+  const { state } = useAuth();
   const [users, setUsers] = useState<UserInfo[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<UserInfo[]>([]);
   const [checkAll, setCheckAll] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<{ id: number }[]>([]);
   const [currentFilters, setCurrentFilters] = useState<Record<string, string>>({
     searchTerm: '',
     status: 'all',
     role: 'all',
   });
+  const [isUserFormOpen, setIsUserFormOpen] = useState(false);
+  const loggedUserId = state.user?.id;
 
   useEffect(() => {
     const fetchAllUsers = async () => {
@@ -95,46 +100,67 @@ export function SystemUsers() {
       name: 'status',
       label: 'Status',
     },
-    // {
-    //   name: 'reservations',
-    //   label: 'Reservas',
-    // },
   ];
 
   useEffect(() => {
+    const users = filteredUsers.filter(user => user.id !== loggedUserId);
     if (filteredUsers.length === 0) {
       setCheckAll(false);
       return;
     }
-    // Verifica se todos os usuários *visíveis (filtrados)* estão selecionados
-    const allFilteredSelected = filteredUsers.every(user => selectedUsers.includes(user.id));
+
+    const allFilteredSelected = users.every(user => selectedUsers.some(selectedUser => selectedUser.id === user.id));
     setCheckAll(allFilteredSelected);
   }, [selectedUsers, filteredUsers]);
 
   const handleUserCheckboxChange = useCallback((id: number, isChecked: boolean) => {
+    if (id === loggedUserId) return;
+
     setSelectedUsers(prevSelected => {
       if (isChecked) {
-        // Adiciona o ID se estiver sendo marcado e ainda não estiver na lista
-        return Array.from(new Set([...prevSelected, id]));
+        if (!prevSelected.some(user => user.id === id)) {
+          return [...prevSelected, { id }];
+        }
+        return prevSelected;
       } else {
-        // Remove o ID se estiver sendo desmarcado
-        return prevSelected.filter(userId => userId !== id);
+        return prevSelected.filter(user => user.id !== id);
       }
     });
-  }, []); // useCallback para otimização
+  }, []);
 
   const handleCheckAll = () => {
-    setCheckAll(prev => !prev); // Inverte o estado do "selecionar todos"
+    setCheckAll(prev => !prev);
     if (!checkAll) {
-      // Se o checkbox "selecionar todos" estiver sendo marcado
-      // Seleciona todos os usuários filtrados
-      setSelectedUsers(filteredUsers.map(user => user.id));
+      setSelectedUsers(filteredUsers.filter(user => user.id !== loggedUserId).map(user => ({ id: user.id })));
     } else {
-      // Se o checkbox "selecionar todos" estiver sendo desmarcado
-      // Limpa todos os usuários selecionados
       setSelectedUsers([]);
     }
   };
+
+  const handleUserStatusChange = async (target: HTMLButtonElement) => {
+    const buttonText = {
+      ativar: 'active',
+      suspender: 'suspend',
+      inativar: 'inactive',
+    };
+
+    const text = target.innerText.toLowerCase();
+    const clicked = buttonText[text as keyof typeof buttonText];
+
+    const usersToUpdate = selectedUsers.map(user => ({
+      id: user.id,
+      status: clicked as 'active' | 'inactive' | 'suspend',
+    }));
+
+    try {
+      const response = await updateMultipleUsers(usersToUpdate);
+      console.log(response);
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
+  const handleUserForm = () => setIsUserFormOpen(prev => !prev);
 
   return (
     <Layout>
@@ -147,7 +173,7 @@ export function SystemUsers() {
             </div>
 
             <div className='bg-black p-2 rounded-md flex items-center ml-auto'>
-              <button className='text-base sm:text-lg lg:text-xl font-semibold text-white cursor-pointer'>
+              <button className='text-base sm:text-lg lg:text-xl font-semibold text-white cursor-pointer' onClick={() => setIsUserFormOpen(prev => !prev)}>
                 <span className='text-base sm:text-lg lg:text-xl mx-2'>+</span> Adicionar Usuário
               </button>
             </div>
@@ -159,6 +185,8 @@ export function SystemUsers() {
             ))}
           </div>
 
+          {isUserFormOpen && <UserForm setIsOpen={handleUserForm} />}
+
           <div className='bg-white pb-4'>
             <Search filters={userFilterFields} onFilterChange={handleFilterChange} />
             {selectedUsers.length > 0 && (
@@ -167,16 +195,31 @@ export function SystemUsers() {
                   <p className='text-base md:text-lg text-blue-700'>{selectedUsers.length} usuário(s) selecionado(s)</p>
                 </div>
                 <div className='ml-auto flex gap-4 items-center'>
-                  <button className='text-base md:text-lg bg-white p-2 rounded-md hover:bg-gray-100 cursor-pointer'>Ativar</button>
-                  <button className='text-base md:text-lg bg-white p-2 rounded-md hover:bg-gray-100 cursor-pointer'>Inativar</button>
-                  <button className='text-base md:text-lg bg-white p-2 rounded-md hover:bg-gray-100 cursor-pointer'>Suspender</button>
+                  <button
+                    className='text-base md:text-lg bg-white p-2 rounded-md hover:bg-gray-100 cursor-pointer'
+                    onClick={e => handleUserStatusChange(e.target as HTMLButtonElement)}
+                  >
+                    Ativar
+                  </button>
+                  <button
+                    className='text-base md:text-lg bg-white p-2 rounded-md hover:bg-gray-100 cursor-pointer'
+                    onClick={e => handleUserStatusChange(e.target as HTMLButtonElement)}
+                  >
+                    Inativar
+                  </button>
+                  <button
+                    className='text-base md:text-lg bg-white p-2 rounded-md hover:bg-gray-100 cursor-pointer'
+                    onClick={e => handleUserStatusChange(e.target as HTMLButtonElement)}
+                  >
+                    Suspender
+                  </button>
                 </div>
               </div>
             )}
           </div>
 
           <div className='bg-white my-6 p-4 rounded-xl shadow-md overflow-x-auto'>
-            <div className={`grid gap-4 items-center`} style={{ gridTemplateColumns: `min-content repeat(${userFields.length}, minmax(0, 1fr))` }}>
+            <div className={`grid gap-4 items-center pb-4 overflow-x-auto`} style={{ gridTemplateColumns: `min-content repeat(${userFields.length}, minmax(0, 1fr))` }}>
               <div className='flex justify-center'>
                 <input type='checkbox' className='w-5 h-5' checked={checkAll} onChange={handleCheckAll} />
               </div>
@@ -192,8 +235,8 @@ export function SystemUsers() {
                     <UserCard
                       userInfo={user}
                       fields={userFields.map(field => field.name)}
-                      onChangeCheckBox={handleUserCheckboxChange} // Passa a nova função
-                      isSelected={selectedUsers.includes(user.id)} // Indica se o usuário está selecionado
+                      onChangeCheckBox={handleUserCheckboxChange}
+                      isSelected={selectedUsers.some(selectedUser => selectedUser.id === user.id)}
                     />
                   </React.Fragment>
                 ))

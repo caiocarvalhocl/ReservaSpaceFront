@@ -59,12 +59,7 @@ export function UserCard({ fields, userInfo, onChangeCheckBox, isSelected }: Use
   return (
     <div className='contents' style={{ gridColumn: `span ${fields.length + 1}` }}>
       <div className='grid-cols-subgrid p-4 flex items-center justify-center'>
-        <input
-          type='checkbox'
-          className='w-5 h-5'
-          checked={isSelected} // Agora controlado pela prop 'isSelected'
-          onChange={e => onChangeCheckBox(userInfo.id, e.target.checked)} // Notifica o pai sobre a mudança
-        />
+        <input type='checkbox' className='w-5 h-5' checked={isSelected} onChange={e => onChangeCheckBox(userInfo.id, e.target.checked)} />
       </div>
       {fields.map((fieldName, index) => (
         <div key={fieldName + index} className='grid-cols-subgrid p-4 flex items-center justify-center'>

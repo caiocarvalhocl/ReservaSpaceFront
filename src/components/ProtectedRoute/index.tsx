@@ -9,9 +9,9 @@ export function ProtectedRoute({ children, minRole }: ProtectedRouteProps) {
   const { state } = useAuth();
 
   const storedToken = localStorage.getItem('authToken');
-  const userRole: UserRole = state.user ? (state.user.role as UserRole) : 'regular';
+  const userRole: UserRole = state.user?.role as UserRole | 'regular';
 
-  if (state.isLoading) return <div>Carregando autenticação...</div>;
+  if (state.isLoading && storedToken) return <div>Carregando autenticação...</div>;
 
   if (!storedToken) {
     return <Navigate to='/' state={{ from: location }} replace />;
