@@ -1,10 +1,17 @@
+import sportCourtImg from '../../assets/sportsCourt.jpg';
+import coworking from '../../assets/coworking.jpg';
+import eventHall from '../../assets/eventHall.jpg';
+import meetingRoom from '../../assets/meetingRoom.jpg';
+import studio from '../../assets/studio.jpg';
+import auditorium from '../../assets/auditorium.jpg';
+
 export const defaultImageByTypeMap: Record<SpaceTypes, string> = {
-  sports_court: '../../../public/zetong-li-CkPACFj8IXY-unsplash.jpg',
-  coworking: '../../../public/helena-lopes-1m2LQEonm2A-unsplash.jpg',
-  event_hall: '../../../public/ibrahim-boran-m8YjB0noWiY-unsplash.jpg',
-  meeting_room: '../../../public/benjamin-child-GWe0dlVD9e0-unsplash.jpg',
-  studio: '../../../public/alexander-dummer-aS4Duj2j7r4-unsplash.jpg',
-  auditorium: '../../../public/asia-culturecenter-COWf-5ZtZ6w-unsplash.jpg',
+  sports_court: sportCourtImg,
+  coworking: coworking,
+  event_hall: eventHall,
+  meeting_room: meetingRoom,
+  studio: studio,
+  auditorium: auditorium,
 };
 
 export const spaceTypeMap: Record<string, string> = {
