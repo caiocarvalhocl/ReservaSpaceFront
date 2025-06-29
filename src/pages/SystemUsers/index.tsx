@@ -10,6 +10,8 @@ import { userRolesMap, userStatusMap } from '../../types/components';
 import { UserCard } from '../../components/UserCard';
 import { useAuth } from '../../hooks/useAuth';
 import { UserForm } from '../../components/Form/UserForm';
+import { Button } from '../../components/common/Button';
+import { updateFormData } from '../../utils/updateFormData';
 
 export function SystemUsers() {
   const { state } = useAuth();
@@ -29,7 +31,6 @@ export function SystemUsers() {
     const fetchAllUsers = async () => {
       try {
         const data = await getAllUsers();
-        console.log('all users', data);
         setUsers(data);
         setFilteredUsers(data);
       } catch (error) {
@@ -57,17 +58,12 @@ export function SystemUsers() {
     setFilteredUsers(filtered);
   }, [currentFilters, users]);
 
-  const handleFilterChange = (fieldName: string, value: string) => {
-    setCurrentFilters(prevFilters => ({
-      ...prevFilters,
-      [fieldName]: value,
-    }));
-  };
+  const handleFilterChange = (fieldName: string, value: string) => updateFormData({ key: fieldName, value, setState: setCurrentFilters });
 
   const userFilterFields: FilterField[] = [
     {
       name: 'searchTerm',
-      label: 'Buscar usuarios',
+      label: 'Buscar Usuarios',
       type: 'text',
       placeholder: 'Digite o nome do usuario...',
     },
@@ -137,7 +133,7 @@ export function SystemUsers() {
     }
   };
 
-  const handleUserStatusChange = async (target: HTMLButtonElement) => {
+  const onStatusChange = async (target: HTMLButtonElement) => {
     const buttonText = {
       ativar: 'active',
       suspender: 'suspend',
@@ -153,8 +149,7 @@ export function SystemUsers() {
     }));
 
     try {
-      const response = await updateMultipleUsers(usersToUpdate);
-      console.log(response);
+      await updateMultipleUsers(usersToUpdate);
     } catch (error: any) {
       console.error(error.message);
     }
@@ -172,11 +167,12 @@ export function SystemUsers() {
               <p className='text-2xl lg:text-3xl text-gray-600'>Gerencie todos os usuários do sistema e monitore atividades</p>
             </div>
 
-            <div className='bg-black p-2 rounded-md flex items-center ml-auto'>
-              <button className='text-base sm:text-lg lg:text-xl font-semibold text-white cursor-pointer' onClick={() => setIsUserFormOpen(prev => !prev)}>
-                <span className='text-base sm:text-lg lg:text-xl mx-2'>+</span> Adicionar Usuário
-              </button>
-            </div>
+            <Button
+              colorType='main'
+              className='p-4 text-base sm:text-lg lg:text-xl font-semibold ml-auto'
+              value='Adicionar Usuário'
+              onClick={() => setIsUserFormOpen(prev => !prev)}
+            />
           </div>
 
           <div className='flex flex-col md:flex-row gap-8 md:gap-4 my-8'>
@@ -195,24 +191,19 @@ export function SystemUsers() {
                   <p className='text-base md:text-lg text-blue-700'>{selectedUsers.length} usuário(s) selecionado(s)</p>
                 </div>
                 <div className='ml-auto flex gap-4 items-center'>
-                  <button
-                    className='text-base md:text-lg bg-white p-2 rounded-md hover:bg-gray-100 cursor-pointer'
-                    onClick={e => handleUserStatusChange(e.target as HTMLButtonElement)}
-                  >
-                    Ativar
-                  </button>
-                  <button
-                    className='text-base md:text-lg bg-white p-2 rounded-md hover:bg-gray-100 cursor-pointer'
-                    onClick={e => handleUserStatusChange(e.target as HTMLButtonElement)}
-                  >
-                    Inativar
-                  </button>
-                  <button
-                    className='text-base md:text-lg bg-white p-2 rounded-md hover:bg-gray-100 cursor-pointer'
-                    onClick={e => handleUserStatusChange(e.target as HTMLButtonElement)}
-                  >
-                    Suspender
-                  </button>
+                  {['Ativar', 'Inativar', 'Suspender'].map((text, index) => (
+                    <>
+                      <Button
+                        key={index}
+                        type='button'
+                        colorType='paper'
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => onStatusChange(e.target as HTMLButtonElement)}
+                        className='text-base md:text-lg hover:bg-gray-100'
+                        hoverType='main'
+                        value={text}
+                      />
+                    </>
+                  ))}
                 </div>
               </div>
             )}

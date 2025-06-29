@@ -5,15 +5,17 @@ import { getCounters } from '../../utils/getCounters';
 import type { SpaceCardProps } from '../../interfaces/components';
 import { getMySpaces } from '../../services/api';
 import { MySpaceCard } from '../../components/SpaceCard/MySpaceCard';
+import { SpaceForm } from '../../components/Form/SpaceForm';
+import { Button } from '../../components/common/Button';
 
 export function MySpaces() {
   const [spaces, setSpaces] = useState<SpaceCardProps[]>([]);
+  const [isSpaceFormOpen, setIsSpaceFormOpen] = useState(false);
 
   useEffect(() => {
     const fetchMySpacesData = async () => {
       try {
         const data = await getMySpaces();
-        console.log(data);
         setSpaces(data);
       } catch (err: any) {
         console.error('Error fetching spaces:', err);
@@ -23,6 +25,7 @@ export function MySpaces() {
   }, []);
 
   const counters = getCounters({ counterType: 'spaces', counter: spaces });
+  const handleSpaceFormModal = () => setIsSpaceFormOpen(prev => !prev);
 
   return (
     <Layout>
@@ -34,11 +37,13 @@ export function MySpaces() {
               <p className='text-2xl lg:text-3xl text-gray-600'>Gerencie todos os seus espaços</p>
             </div>
 
-            <div className='bg-black p-2 rounded-md flex items-center ml-auto'>
-              <button className='text-base sm:text-lg lg:text-xl font-semibold text-white cursor-pointer'>
-                <span className='text-base sm:text-lg lg:text-xl mx-2'>+</span> Adicionar Espaços
-              </button>
-            </div>
+            <Button
+              colorType='main'
+              hoverType='secondary'
+              className='p-4 my-2 text-base sm:text-lg lg:text-xl font-semibold ml-auto'
+              value='Adicionar Espaços'
+              onClick={handleSpaceFormModal}
+            />
           </div>
 
           <div className='flex flex-col md:flex-row gap-8 md:gap-4 my-8'>
@@ -66,13 +71,14 @@ export function MySpaces() {
                 ))
               ) : (
                 <div className='m-auto'>
-                  <p>Voce nao tem espaços</p>
+                  <p>Você não tem espaços</p>
                 </div>
               )}
             </div>
           </div>
         </div>
       </div>
+      {isSpaceFormOpen && <SpaceForm setIsOpen={handleSpaceFormModal} />}
     </Layout>
   );
 }

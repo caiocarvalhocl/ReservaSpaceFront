@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router';
+import { Button } from '../../common/Button';
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -51,9 +52,7 @@ export function LoginForm() {
             </div>
 
             <div>
-              <button type='submit' className='bg-black p-4 my-6 text-white w-full font-bold cursor-pointer'>
-                Entrar
-              </button>
+              <Button type='submit' colorType='main' hoverType='secondary' className='p-4 my-6 w-full font-bold' value='Entrar' />
             </div>
 
             <div className='flex items-center gap-2 justify-center'>

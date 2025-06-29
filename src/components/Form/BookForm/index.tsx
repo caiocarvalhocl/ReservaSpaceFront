@@ -6,6 +6,7 @@ import { useState, type FormEvent } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router';
 import { book } from '../../../services/api';
+import { Button } from '../../common/Button';
 
 export function BookForm({ spaceId, onSuccess }: { spaceId: number; onSuccess: () => void }) {
   const navigate = useNavigate();
@@ -120,9 +121,7 @@ export function BookForm({ spaceId, onSuccess }: { spaceId: number; onSuccess: (
         </div>
       </div>
 
-      <button type='submit' className='bg-black text-white w-full p-2 font-semibold text-xl sm:text-2xl cursor-pointer'>
-        Reservar
-      </button>
+      <Button type='submit' colorType='main' className=' w-full font-semibold' value='Reservar' />
     </form>
   );
 }

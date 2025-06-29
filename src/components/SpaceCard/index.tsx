@@ -5,6 +5,7 @@ import { useState } from 'react';
 import type { ResourcesProps, SpaceCardProps } from '../../interfaces/components';
 import { TagList } from '../TagList';
 import { Book } from '../Book';
+import { Button } from '../common/Button';
 
 export function SpaceCard({ id, imageUrl, name, description, type, price, capacity, spaceResources, isAvailable }: SpaceCardProps) {
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
@@ -54,13 +55,13 @@ export function SpaceCard({ id, imageUrl, name, description, type, price, capaci
           </div>
 
           <div>
-            <button
-              className={`bg-black text-white w-full p-2 font-bold text-2xl rounded-md ${isAvailable ? 'cursor-pointer' : 'bg-gray-500'}`}
+            <Button
+              className={`w-full font-bold text-2xl`}
+              colorType={isAvailable ? 'main' : 'secondary'}
               disabled={!isAvailable}
               onClick={handleIsBookModal}
-            >
-              {isAvailable ? <>Reservar Agora</> : <>Indisponível</>}
-            </button>
+              value={isAvailable ? 'Reservar Agora' : 'Indisponível'}
+            />
           </div>
         </div>
 

@@ -2,15 +2,10 @@ import { CircleX, Edit, Ellipsis, Eye, ImageOff, Trash, Users } from 'lucide-rea
 import type { SpaceCardProps } from '../../interfaces/components';
 import { useState } from 'react';
 import { SPACE_COLOR_STATUS_MAP, ICON_BASE_CLASSNAME } from '../../utils/constants';
+import { spaceStatusMap } from '../../types/components';
 
 export function MySpaceCard({ imageUrl, name, description, status, price, capacity, reservations }: SpaceCardProps) {
   const [submenuOpen, setSubmenuOpen] = useState(false);
-
-  const formattedStatusText: Record<string, string> = {
-    active: 'ativo',
-    maintenance: 'manutencao',
-    inactive: 'inativo',
-  };
 
   const formattedLastReservation = reservations && reservations.length > 0 ? new Date(reservations[0].createdAt).toLocaleDateString() : undefined;
 
@@ -22,7 +17,7 @@ export function MySpaceCard({ imageUrl, name, description, status, price, capaci
 
           <div className='absolute inset-4 w-fit h-fit'>
             <span className={`capitalize text-base sm:text-xl font-semibold px-3 py-1 rounded-full self-start ${SPACE_COLOR_STATUS_MAP[status || 'inactive']}`}>
-              {formattedStatusText[status || 'inactive']}
+              {spaceStatusMap[status || 'inactive']}
             </span>
           </div>
 

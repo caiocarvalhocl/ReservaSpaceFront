@@ -7,6 +7,15 @@ export const spaceTypeMap: Record<string, string> = {
   meeting_room: 'Sala de Reunião',
 };
 
+export const spaceStatusMap: Record<string, string> = {
+  active: 'ativo',
+  maintenance: 'manutenção',
+  inactive: 'inativo',
+};
+
+export type SpaceTypes = keyof typeof spaceTypeMap;
+export type SpaceStatus = keyof typeof spaceStatusMap;
+
 export type LastReservation = {
   createdAt: string;
 };

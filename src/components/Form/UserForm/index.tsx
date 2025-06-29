@@ -2,9 +2,13 @@ import { X } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { userRolesMap, type UserRole } from '../../../types/components';
 import { createUser } from '../../../services/api';
+import { updateFormData } from '../../../utils/updateFormData';
+import type { RegisterFormProps } from '../../../interfaces/auth/auth';
+import { Input, SelectInput } from '../../common/Input';
+import { Button } from '../../common/Button';
 
 export function UserForm({ setIsOpen }: { setIsOpen: () => void }) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<RegisterFormProps>({
     name: '',
     email: '',
     password: '',
@@ -14,19 +18,10 @@ export function UserForm({ setIsOpen }: { setIsOpen: () => void }) {
 
   const roleOptions = [...Object.entries(userRolesMap).map(([value, label]) => ({ value, label: label as string }))];
 
-  const handleChangeFormData = (targetId: string, value: string) => {
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      [targetId]: value,
-    }));
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
       const response = await createUser(formData);
-
-      console.log(response);
 
       if (response) setIsOpen();
     } catch (error) {
@@ -43,7 +38,7 @@ export function UserForm({ setIsOpen }: { setIsOpen: () => void }) {
             <h1 className='font-bold text-3xl'>Adicionar Novo Usuario</h1>
 
             <div className='ml-auto'>
-              <X onClick={setIsOpen} />
+              <X onClick={setIsOpen} className='cursor-pointer' />
             </div>
           </div>
 
@@ -53,87 +48,52 @@ export function UserForm({ setIsOpen }: { setIsOpen: () => void }) {
         <div>
           <form onSubmit={handleSubmit}>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-              <div className='flex flex-col'>
-                <label htmlFor='name' className='text-lg md:text-xl'>
-                  Nome
-                </label>
-                <input
-                  type='text'
-                  id='name'
-                  value={formData.name}
-                  onChange={e => handleChangeFormData(e.target.id, e.target.value)}
-                  className='p-2 outline outline-gray-300 rounded-md text-lg md:text-xl'
-                  required
-                />
-              </div>
-              <div className='flex flex-col'>
-                <label htmlFor='email' className='text-lg md:text-xl'>
-                  E-mail
-                </label>
-                <input
-                  type='email'
-                  id='email'
-                  value={formData.email}
-                  onChange={e => handleChangeFormData(e.target.id, e.target.value)}
-                  className='p-2 outline outline-gray-300 rounded-md text-lg md:text-xl'
-                  required
-                />
-              </div>
-              <div className='flex flex-col'>
-                <label htmlFor='password' className='text-lg md:text-xl'>
-                  Senha
-                </label>
-                <input
-                  type='password'
-                  id='password'
-                  value={formData.password}
-                  onChange={e => handleChangeFormData(e.target.id, e.target.value)}
-                  className='p-2 outline outline-gray-300 rounded-md text-lg md:text-xl'
-                  required
-                />
-              </div>
-              <div className='flex flex-col'>
-                <label htmlFor='phone' className='text-lg md:text-xl'>
-                  Telefone
-                </label>
-                <input
-                  type='text'
-                  id='phone'
-                  value={formData.phone}
-                  onChange={e => handleChangeFormData(e.target.id, e.target.value)}
-                  className='p-2 outline outline-gray-300 rounded-md text-lg md:text-xl'
-                  required
-                />
-              </div>
-              <div className='flex flex-col'>
-                <label htmlFor='role' className='text-lg md:text-xl'>
-                  Função
-                </label>
-                <select
-                  id='role'
-                  value={formData.role}
-                  onChange={e => handleChangeFormData(e.target.id, e.target.value)}
-                  className='p-2 outline outline-gray-300 rounded-md capitalize text-lg md:text-xl'
-                  required
-                >
-                  {roleOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <Input
+                id='name'
+                type='text'
+                labelText='Nome'
+                value={formData.name}
+                onChange={e => updateFormData({ key: e.target.id as keyof RegisterFormProps, value: e.target.value, setState: setFormData })}
+                required
+              />
+              <Input
+                labelText='E-mail'
+                type='email'
+                id='email'
+                value={formData.email}
+                onChange={e => updateFormData({ key: e.target.id as keyof RegisterFormProps, value: e.target.value, setState: setFormData })}
+                required
+              />
+              <Input
+                id='password'
+                type='password'
+                labelText='Senha'
+                value={formData.password}
+                onChange={e => updateFormData({ key: e.target.id as keyof RegisterFormProps, value: e.target.value, setState: setFormData })}
+                required
+              />
+              <Input
+                type='text'
+                id='phone'
+                labelText='Telefone'
+                value={formData.phone}
+                onChange={e => updateFormData({ key: e.target.id as keyof RegisterFormProps, value: e.target.value, setState: setFormData })}
+                className='p-2 outline outline-gray-300 rounded-md text-lg md:text-xl'
+                required
+              />
+
+              <SelectInput
+                labelText='Função'
+                id='role'
+                value={formData.role}
+                onChange={e => updateFormData({ key: e.target.name as keyof RegisterFormProps, value: e.target.value, setState: setFormData })}
+                options={roleOptions}
+                required
+              />
+
               <div className='col-span-1 md:col-span-2 flex gap-4 w-fit ml-auto'>
-                <button
-                  type='button'
-                  className='bg-white py-2 px-4 text-black font-bold cursor-pointer outline outline-gray-300 rounded-md text-base md:text-lg'
-                  onClick={setIsOpen}
-                >
-                  Cancelar
-                </button>
-                <button type='submit' className='bg-black py-2 px-4 text-white font-bold cursor-pointer rounded-md text-base md:text-lg'>
-                  Criar Conta
-                </button>
+                <Button colorType='paper' hoverType='paper' onClick={setIsOpen} value='Cancelar' className='outline outline-gray-300' />
+                <Button colorType='main' hoverType='secondary' onClick={setIsOpen} value='Criar Conta' className='font-bold' />
               </div>
             </div>
           </form>

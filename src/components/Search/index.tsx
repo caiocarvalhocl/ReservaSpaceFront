@@ -1,4 +1,5 @@
 import type { SearchProps } from '../../interfaces/components';
+import { toCapitalize } from '../../utils/toCapitalize';
 
 export function Search({ filters, onFilterChange }: SearchProps) {
   return (
@@ -20,7 +21,7 @@ export function Search({ filters, onFilterChange }: SearchProps) {
                 <select className='outline outline-gray-200 p-2 text-xl sm:text-2xl capitalize' onChange={e => onFilterChange(filter.name, e.target.value)}>
                   {filter.options.map((option, optIndex) => (
                     <option key={optIndex} value={option.value}>
-                      {option.label}
+                      {toCapitalize(option.label)}
                     </option>
                   ))}
                 </select>

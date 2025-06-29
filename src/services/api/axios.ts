@@ -38,7 +38,6 @@ api.interceptors.response.use(
     return response;
   },
   async error => {
-    console.log(error);
     if (error.response && error.response.status === 401) {
       console.error('Unauthorized request. Token might be expired or invalid.');
       localStorage.removeItem('user');

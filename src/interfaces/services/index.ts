@@ -1,3 +1,4 @@
+import type { SpaceStatus, SpaceTypes } from '../../types/components';
 import type { UserInfo } from '../auth/user';
 
 export interface LoginResponse {
@@ -17,4 +18,18 @@ export interface BookBody {
 
 export interface BookResponse {
   message: string;
+}
+
+export interface SpaceFormRequest {
+  type: SpaceTypes;
+  imageUrl: string | null;
+  name: string;
+  description: string;
+  price: number;
+  capacity: number;
+  status: SpaceStatus;
+}
+
+export interface SpaceFormResponse {
+  status: SpaceStatus;
 }

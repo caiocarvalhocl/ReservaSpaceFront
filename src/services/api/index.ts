@@ -1,7 +1,7 @@
 import type { AxiosResponse } from 'axios';
 import { api } from './axios';
 import type { SpaceCardProps, UserReservationsProps } from '../../interfaces/components';
-import type { BookBody, BookResponse, RegisterResponse } from '../../interfaces/services';
+import type { BookBody, BookResponse, RegisterResponse, SpaceFormRequest, SpaceFormResponse } from '../../interfaces/services';
 import type { MySpacesResponse, UserResponse, UserUpdate } from '../../types/services';
 import type { RegisterFormProps } from '../../interfaces/auth/auth';
 
@@ -43,6 +43,12 @@ export async function updateMultipleUsers(users: UserUpdate) {
 
 export async function createUser(user: RegisterFormProps) {
   const response: AxiosResponse<RegisterResponse> = await api.post('api/users/', user);
+
+  return response.data;
+}
+
+export async function createSpace(space: SpaceFormRequest) {
+  const response: AxiosResponse<SpaceFormResponse> = await api.post('api/spaces/', space);
 
   return response.data;
 }

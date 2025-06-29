@@ -4,6 +4,7 @@ import { SpaceCard } from '../SpaceCard';
 import { type FilterField, type SpaceCardProps } from '../../interfaces/components';
 import { Search } from '../Search';
 import { spaceTypeMap } from '../../types/components';
+import { updateFormData } from '../../utils/updateFormData';
 
 export function Space() {
   const [spaces, setSpaces] = useState<SpaceCardProps[]>([]);
@@ -19,9 +20,8 @@ export function Space() {
         const data = await getSpaces();
         setSpaces(data);
         setFilteredSpaces(data);
-        console.log('Fetched spaces:', data);
-      } catch (err: any) {
-        console.error('Error fetching spaces:', err);
+      } catch (error) {
+        console.error('Error fetching spaces:', error);
       }
     };
     fetchSpacesData();
@@ -41,12 +41,7 @@ export function Space() {
     setFilteredSpaces(filtered);
   }, [currentFilters, spaces]);
 
-  const handleFilterChange = (fieldName: string, value: string) => {
-    setCurrentFilters(prevFilters => ({
-      ...prevFilters,
-      [fieldName]: value,
-    }));
-  };
+  const handleFilterChange = (fieldName: string, value: string) => updateFormData({ key: fieldName, value, setState: setCurrentFilters });
 
   const spaceFilterFields: FilterField[] = [
     {

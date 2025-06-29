@@ -3,6 +3,7 @@ import { Users } from 'lucide-react';
 import { spaceTypeMap } from '../../types/components';
 import type { ReseravationCardProps } from '../../interfaces/components';
 import { TagList } from '../TagList';
+import { Button } from '../common/Button';
 
 export function ReservationCard({ id, imageUrl, name, description, type, price, capacity, spaceResources, status, startTime, endTime }: ReseravationCardProps) {
   const formattedDate = status === 'canceled' && endTime ? new Date(endTime).toLocaleDateString() : new Date(startTime).toLocaleDateString();
@@ -58,16 +59,14 @@ export function ReservationCard({ id, imageUrl, name, description, type, price, 
 
           <div>
             <div className='flex flex-wrap gap-2'>
-              <button className='flex items-center gap-2 outline w-fit p-2 outline-gray-300 rounded-md cursor-pointer hover:bg-black hover:text-white'>
+              <Button type='button' colorType='paper' value='Detalhes' className='w-fit outline outline-gray-300 font-semibold' hoverType='paper'>
                 <Eye className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />
-                <span className='font-semibold text-lg sm:text-2xl'>Detalhes</span>
-              </button>
+              </Button>
 
               {status === 'confirmed' && (
-                <button className='flex items-center gap-2 outline w-fit p-2 outline-gray-300 rounded-md cursor-pointer text-red-500 hover:bg-red-500 hover:text-white hover:outline-red-500'>
+                <Button type='button' colorType='paper' value='Cancelar' className='w-fit outline outline-gray-300 font-semibold text-red-500' hoverType='red'>
                   <Trash2 className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />
-                  <span className='font-semibold text-xl sm:text-2xl'>Cancelar</span>
-                </button>
+                </Button>
               )}
             </div>
           </div>
