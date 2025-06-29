@@ -3,6 +3,7 @@ import type { UserInfo } from '../../interfaces/auth/user';
 import type { UserCardProps } from '../../interfaces/components';
 import { userRolesMap, userStatusMap, type UserRole, type UserStatus } from '../../types/components';
 import { USER_COLOR_ROLE_MAP, USER_COLOR_STATUS_MAP } from '../../utils/constants';
+import { Input } from '../common/Input';
 
 const BASE_ICON_CLASSNAME = 'w-5 h-5 sm:w-10 sm:h-10 md:w-8 md:h-8';
 
@@ -59,10 +60,10 @@ export function UserCard({ fields, userInfo, onChangeCheckBox, isSelected }: Use
   return (
     <div className='contents' style={{ gridColumn: `span ${fields.length + 1}` }}>
       <div className='grid-cols-subgrid p-4 flex items-center justify-center'>
-        <input type='checkbox' className='w-5 h-5' checked={isSelected} onChange={e => onChangeCheckBox(userInfo.id, e.target.checked)} />
+        <Input type='checkbox' className='w-5 h-5' checked={isSelected} onChange={e => onChangeCheckBox(userInfo.id, e.target.checked)} />
       </div>
       {fields.map((fieldName, index) => (
-        <div key={fieldName + index} className='grid-cols-subgrid p-4 flex items-center justify-center'>
+        <div key={fieldName + '_' + index} className='grid-cols-subgrid p-4 flex items-center justify-center'>
           {renderField(fieldName, userInfo)}
         </div>
       ))}

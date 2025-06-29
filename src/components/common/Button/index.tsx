@@ -1,11 +1,12 @@
 import type { ButtonProps } from '../../../interfaces/components/common';
 
-export function Button({ type = 'button', value, onClick, colorType, children, className, hoverType, ...props }: ButtonProps) {
+export function Button({ id, type = 'button', value, onClick, colorType, children, className, hoverType, ...props }: ButtonProps) {
   const colors: Record<string, string> = {
     main: 'bg-black text-white',
     paper: 'bg-white text-black',
     primary: '',
     secondary: 'bg-gray-500 text-white',
+    red: 'bg-white text-red-500',
   };
 
   const hovers: Record<string, string> = {

@@ -1,19 +1,44 @@
-import { CircleX, Edit, Ellipsis, Eye, ImageOff, Trash, Users } from 'lucide-react';
+import { CheckLine, Edit, Ellipsis, Eye, ImageOff, Trash, Users } from 'lucide-react';
 import type { SpaceCardProps } from '../../interfaces/components';
 import { useState } from 'react';
 import { SPACE_COLOR_STATUS_MAP, ICON_BASE_CLASSNAME } from '../../utils/constants';
-import { spaceStatusMap } from '../../types/components';
+import { defaultImageByTypeMap, spaceStatusMap } from '../../types/components';
+import { Button } from '../common/Button';
+import { deleteSpace, updateReservationStatus } from '../../services/api';
 
-export function MySpaceCard({ imageUrl, name, description, status, price, capacity, reservations }: SpaceCardProps) {
+export function MySpaceCard({ id, imageUrl, name, type, description, status, price, capacity, reservations }: SpaceCardProps) {
   const [submenuOpen, setSubmenuOpen] = useState(false);
 
-  const formattedLastReservation = reservations && reservations.length > 0 ? new Date(reservations[0].createdAt).toLocaleDateString() : undefined;
+  const findReservation = reservations && reservations.length > 0;
+  const formattedDateLastReservation = findReservation ? new Date(reservations[0].createdAt).toLocaleDateString() : null;
+
+  const handleReservationRelease = async (id: number) => {
+    try {
+      await updateReservationStatus({ id: Number(id), status: 'confirmed' });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSpaceDelete = async (id: number) => {
+    try {
+      await deleteSpace({ id });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className='w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1rem)] flex-shrink-0'>
       <div>
-        <div className='relative flex justify-center items-center bg-gray-400 w-full min-h-60 p-4 rounded-t-lg'>
-          <div>{imageUrl !== null ? <img src={imageUrl} alt='Picture' className='object-cover' /> : <ImageOff />}</div>
+        <div className='relative flex justify-center items-center bg-gray-400 w-full rounded-t-lg'>
+          <div className='w-full h-full flex'>
+            {imageUrl || defaultImageByTypeMap[type] ? (
+              <img src={imageUrl ? imageUrl : defaultImageByTypeMap[type]} alt='Picture' className='w-full h-full object-cover rounded-t-lg' />
+            ) : (
+              <ImageOff className='w-10 h-10 m-auto' />
+            )}
+          </div>
 
           <div className='absolute inset-4 w-fit h-fit'>
             <span className={`capitalize text-base sm:text-xl font-semibold px-3 py-1 rounded-full self-start ${SPACE_COLOR_STATUS_MAP[status || 'inactive']}`}>
@@ -23,9 +48,9 @@ export function MySpaceCard({ imageUrl, name, description, status, price, capaci
 
           <div className='absolute inset-4 ml-auto w-fit h-fit'>
             <div className='relative flex items-center bg-white p-2 rounded-md'>
-              <button className='text-gray-800 focus:outline-none cursor-pointer' onClick={() => setSubmenuOpen(prev => !prev)}>
+              <Button colorType='paper' className='text-gray-800 h-9 focus:outline-none' onClick={() => setSubmenuOpen(prev => !prev)}>
                 <Ellipsis className='w-8 h-8' />
-              </button>
+              </Button>
             </div>
 
             {submenuOpen && (
@@ -36,31 +61,30 @@ export function MySpaceCard({ imageUrl, name, description, status, price, capaci
                   <div>
                     <ul>
                       <li className='p-4'>
-                        <button className='flex gap-2 items-center cursor-pointer'>
+                        <Button colorType='paper' className='sm:text-lg text-start' value='Ver Detalhes'>
                           <Eye className={`${ICON_BASE_CLASSNAME}`} />
-                          <span className='text-lg sm:text-xl'>Ver Detalhes</span>
-                        </button>
+                        </Button>
                       </li>
                       <li className='p-4'>
-                        <button className='flex gap-2 items-center cursor-pointer'>
+                        <Button colorType='paper' className='text-lg sm:text-xl' value='Editar'>
                           <Edit className={`${ICON_BASE_CLASSNAME}`} />
-                          <span className='text-lg sm:text-xl'>Editar</span>
-                        </button>
+                        </Button>
                       </li>
-                      <li className='p-4'>
-                        <button className='flex gap-2 items-center cursor-pointer'>
-                          <CircleX className={`${ICON_BASE_CLASSNAME}`} />
-                          <span className='text-lg sm:text-xl'>Desativar</span>
-                        </button>
-                      </li>
+
+                      {findReservation && reservations[0].status === 'pending' && (
+                        <li className='p-4'>
+                          <Button colorType='paper' value='Liberar reserva' className='text-sm sm:text-lg' onClick={() => handleReservationRelease(reservations[0].id)}>
+                            <CheckLine className={`${ICON_BASE_CLASSNAME}`} />
+                          </Button>
+                        </li>
+                      )}
 
                       <hr className='text-gray-200' />
 
                       <li className='p-4'>
-                        <button className='flex gap-2 items-center cursor-pointer text-red-500'>
+                        <Button colorType='red' className='text-lg sm:text-xl' value='Excluir' onClick={() => handleSpaceDelete(id)}>
                           <Trash className={`${ICON_BASE_CLASSNAME}`} />
-                          <span className='text-lg sm:text-xl'>Excluir</span>
-                        </button>
+                        </Button>
                       </li>
                     </ul>
                   </div>
@@ -83,16 +107,16 @@ export function MySpaceCard({ imageUrl, name, description, status, price, capaci
           </div>
 
           <div>
-            <div className='flex gap-2'>
-              <Users className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />
-              <p className='text-xl sm:text-2xl'>Capacidade: {capacity} pessoas</p>
+            <div className='flex gap-2 items-center text-xl sm:text-2xl'>
+              <Users className={`${ICON_BASE_CLASSNAME}`} />
+              <p>Capacidade: {capacity} pessoas</p>
             </div>
           </div>
 
           <div className='flex items-center py-2'>
             <div className='ml-auto'>
-              {reservations && reservations.length > 0 ? (
-                <p className='text-base text-gray-500'>Última reserva: {formattedLastReservation}</p>
+              {findReservation ? (
+                <p className='text-base text-gray-500'>Última reserva: {formattedDateLastReservation}</p>
               ) : (
                 <p className='text-base text-gray-500'>Nunca reservado</p>
               )}

@@ -1,4 +1,4 @@
-import type { SpaceStatus, SpaceTypes } from '../../types/components';
+import type { ReservationStatus, SpaceStatus, SpaceTypes } from '../../types/components';
 import type { UserInfo } from '../auth/user';
 
 export interface LoginResponse {
@@ -32,4 +32,9 @@ export interface SpaceFormRequest {
 
 export interface SpaceFormResponse {
   status: SpaceStatus;
+}
+
+export interface ReservationUpdateRequest {
+  id?: number;
+  status: ReservationStatus;
 }

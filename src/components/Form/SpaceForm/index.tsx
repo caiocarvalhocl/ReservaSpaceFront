@@ -117,7 +117,7 @@ export function SpaceForm({ setIsOpen }: { setIsOpen: () => void }) {
               </div>
             </div>
 
-            <div className='col-span-2 flex gap-4 w-fit ml-auto'>
+            <div className='col-span-2 flex gap-4 w-fit ml-auto mt-4'>
               <Button colorType='paper' hoverType='secondary' className='py-2 px-4 font-bold outline outline-gray-300 text-base md:text-lg' onClick={setIsOpen} value='Cancelar' />
               <Button type='submit' colorType='main' hoverType='paper' className='py-2 px-4 font-bold' value='Criar Espaco' />
             </div>

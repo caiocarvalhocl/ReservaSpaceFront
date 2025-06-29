@@ -9,7 +9,14 @@ export function Input({ id, type, labelText, className = '', value, onChange, ..
           {labelText}
         </label>
       )}
-      <input id={id} type={type} value={value} onChange={onChange} className={`p-2 outline outline-gray-300 rounded-md text-lg md:text-xl ${className}`} {...rest} />
+      <input
+        id={id}
+        type={type}
+        value={value}
+        onChange={onChange}
+        className={`p-2 ${type !== 'checkbox' ? 'outline outline-gray-300' : ''} rounded-md text-lg md:text-xl ${className}`}
+        {...rest}
+      />
     </div>
   );
 }

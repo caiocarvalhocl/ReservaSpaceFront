@@ -1,6 +1,6 @@
 import { ImageOff } from 'lucide-react';
 import { Users } from 'lucide-react';
-import { spaceTypeMap } from '../../types/components';
+import { defaultImageByTypeMap, spaceTypeMap } from '../../types/components';
 import { useState } from 'react';
 import type { ResourcesProps, SpaceCardProps } from '../../interfaces/components';
 import { TagList } from '../TagList';
@@ -15,8 +15,14 @@ export function SpaceCard({ id, imageUrl, name, description, type, price, capaci
   return (
     <div className='w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1rem)] flex-shrink-0'>
       <div>
-        <div className='relative flex justify-center items-center bg-gray-400 w-full min-h-60 p-4 rounded-t-lg'>
-          <div>{imageUrl !== null ? <img src={imageUrl} alt='Picture' className='object-cover' /> : <ImageOff />}</div>
+        <div className='relative flex justify-center items-center bg-gray-400 w-full h-[200px] rounded-t-lg overflow-hidden'>
+          <div className='w-full h-full flex'>
+            {imageUrl || defaultImageByTypeMap[type] ? (
+              <img src={imageUrl ? imageUrl : defaultImageByTypeMap[type]} alt='Picture' className='w-full h-full object-cover rounded-t-lg' />
+            ) : (
+              <ImageOff className='w-10 h-10 m-auto' />
+            )}
+          </div>
 
           <div className='absolute inset-4 w-fit h-fit'>
             {isAvailable ? (
@@ -50,7 +56,7 @@ export function SpaceCard({ id, imageUrl, name, description, type, price, capaci
             </div>
           </div>
 
-          <div className='flex items-center py-2'>
+          <div className='flex items-center py-2 h-[25px]'>
             <TagList items={spaceResources as ResourcesProps[]} type='resource' />
           </div>
 

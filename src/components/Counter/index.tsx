@@ -7,6 +7,7 @@ export function Counter({ title, count, icon, color }: CounterProps) {
     green: 'text-green-800',
     purple: 'text-purple-900',
     cyan: 'text-cyan-300',
+    gray: 'text-gray-500',
   };
 
   const textColorClass = colorMap[color] || 'text-black';

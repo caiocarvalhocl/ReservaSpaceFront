@@ -1,4 +1,4 @@
-import { Activity, CalendarDays, ChartColumnIncreasing, CircleCheckBig, DollarSign, Loader, Star, UserRoundCheck, Users } from 'lucide-react';
+import { Activity, CalendarDays, ChartColumnIncreasing, CircleCheckBig, DollarSign, Loader, Star, UserRoundCheck, UserRoundMinus, UserRoundX, Users } from 'lucide-react';
 import type { SpaceCardProps, UserReservationsProps } from '../interfaces/components';
 import type { UserInfo } from '../interfaces/auth/user';
 
@@ -96,16 +96,23 @@ export function getCounters({ counterType, counter }: { counterType: string; cou
         color: 'blue',
       },
       {
-        title: 'Usuarios Ativos',
+        title: 'Usuários Ativos',
         count: (counter as UserInfo[]).reduce((acc, item) => (item.status === 'active' ? acc + 1 : acc), 0),
         icon: <UserRoundCheck color='green' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'green',
       },
 
       {
-        title: 'Media de Reservas',
-        count: 0,
-        icon: <Activity color='red' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
+        title: 'Usuários Inativos',
+        count: (counter as UserInfo[]).reduce((acc, item) => (item.status === 'inactive' ? acc + 1 : acc), 0),
+        icon: <UserRoundMinus color='gray' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
+        color: 'gray',
+      },
+
+      {
+        title: 'Usuários Suspensos',
+        count: (counter as UserInfo[]).reduce((acc, item) => (item.status === 'suspend' ? acc + 1 : acc), 0),
+        icon: <UserRoundX color='red' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'red',
       },
     ];

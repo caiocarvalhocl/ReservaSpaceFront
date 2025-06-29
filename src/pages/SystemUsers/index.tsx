@@ -6,12 +6,13 @@ import { getCounters } from '../../utils/getCounters';
 import { Counter } from '../../components/Counter';
 import { Search } from '../../components/Search';
 import type { FilterField } from '../../interfaces/components';
-import { userRolesMap, userStatusMap } from '../../types/components';
+import { userRolesMap, userStatusMap, type UserStatus } from '../../types/components';
 import { UserCard } from '../../components/UserCard';
 import { useAuth } from '../../hooks/useAuth';
 import { UserForm } from '../../components/Form/UserForm';
 import { Button } from '../../components/common/Button';
 import { updateFormData } from '../../utils/updateFormData';
+import { Input } from '../../components/common/Input';
 
 export function SystemUsers() {
   const { state } = useAuth();
@@ -60,6 +61,8 @@ export function SystemUsers() {
 
   const handleFilterChange = (fieldName: string, value: string) => updateFormData({ key: fieldName, value, setState: setCurrentFilters });
 
+  const counters = getCounters({ counterType: 'users', counter: users });
+
   const userFilterFields: FilterField[] = [
     {
       name: 'searchTerm',
@@ -80,8 +83,6 @@ export function SystemUsers() {
       options: [{ value: 'all', label: 'Todos' }, ...Object.entries(userStatusMap).map(([value, label]) => ({ value, label: label as string }))],
     },
   ];
-
-  const counters = getCounters({ counterType: 'users', counter: users });
 
   const userFields = [
     {
@@ -145,7 +146,7 @@ export function SystemUsers() {
 
     const usersToUpdate = selectedUsers.map(user => ({
       id: user.id,
-      status: clicked as 'active' | 'inactive' | 'suspend',
+      status: clicked as UserStatus,
     }));
 
     try {
@@ -192,17 +193,15 @@ export function SystemUsers() {
                 </div>
                 <div className='ml-auto flex gap-4 items-center'>
                   {['Ativar', 'Inativar', 'Suspender'].map((text, index) => (
-                    <>
-                      <Button
-                        key={index}
-                        type='button'
-                        colorType='paper'
-                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => onStatusChange(e.target as HTMLButtonElement)}
-                        className='text-base md:text-lg hover:bg-gray-100'
-                        hoverType='main'
-                        value={text}
-                      />
-                    </>
+                    <Button
+                      key={index}
+                      type='button'
+                      colorType='paper'
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => onStatusChange(e.target as HTMLButtonElement)}
+                      className='text-base md:text-lg hover:bg-gray-100'
+                      hoverType='main'
+                      value={text}
+                    />
                   ))}
                 </div>
               </div>
@@ -212,7 +211,7 @@ export function SystemUsers() {
           <div className='bg-white my-6 p-4 rounded-xl shadow-md overflow-x-auto'>
             <div className={`grid gap-4 items-center pb-4 overflow-x-auto`} style={{ gridTemplateColumns: `min-content repeat(${userFields.length}, minmax(0, 1fr))` }}>
               <div className='flex justify-center'>
-                <input type='checkbox' className='w-5 h-5' checked={checkAll} onChange={handleCheckAll} />
+                <Input type='checkbox' className='w-5 h-5' checked={checkAll} onChange={handleCheckAll} />
               </div>
               {userFields.map((col, index) => (
                 <div key={index} className='flex justify-center'>
@@ -222,14 +221,13 @@ export function SystemUsers() {
 
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user, index) => (
-                  <React.Fragment key={user.id || index}>
-                    <UserCard
-                      userInfo={user}
-                      fields={userFields.map(field => field.name)}
-                      onChangeCheckBox={handleUserCheckboxChange}
-                      isSelected={selectedUsers.some(selectedUser => selectedUser.id === user.id)}
-                    />
-                  </React.Fragment>
+                  <UserCard
+                    key={index}
+                    userInfo={user}
+                    fields={userFields.map(field => field.name)}
+                    onChangeCheckBox={handleUserCheckboxChange}
+                    isSelected={selectedUsers.some(selectedUser => selectedUser.id === user.id)}
+                  />
                 ))
               ) : (
                 <div className='col-span-full text-center text-gray-500 py-8'>Nenhum usuário encontrado com os filtros aplicados.</div>

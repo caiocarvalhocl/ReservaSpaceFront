@@ -13,7 +13,8 @@ export function BookForm({ spaceId, onSuccess }: { spaceId: number; onSuccess: (
   const { state } = useAuth();
   const [startTime, setStartTime] = useState(dayjs());
   const [endTime, setEndTime] = useState(dayjs());
-  const [selectedTime, setSelectedTime] = useState<number | null>(null);
+  const [selectedStartTime, setSelectedStartTime] = useState<number | null>(null);
+  const [selectedEndTime, setSelectedEndTime] = useState<number | null>(null);
 
   const timeSlots = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
@@ -25,13 +26,19 @@ export function BookForm({ spaceId, onSuccess }: { spaceId: number; onSuccess: (
       return;
     }
 
-    if (selectedTime === null) return;
+    if (selectedStartTime === null || selectedEndTime === null) return;
 
     try {
-      const selectedHour = timeSlots[selectedTime];
+      const selectedStartHour = timeSlots[selectedStartTime];
+      const selectedEndHour = timeSlots[selectedEndTime];
 
-      const startDateTime = dayjs(`${startTime.format('YYYY-MM-DD')}T${selectedHour}`);
-      const endDateTime = dayjs(`${endTime.format('YYYY-MM-DD')}T${selectedHour}`);
+      const isSameDate = startTime.format('YYYY-MM-DD') === endTime.format('YYYY-MM-DD');
+
+      const startDateTime = dayjs(`${startTime.format('YYYY-MM-DD')}T${selectedStartHour}`);
+
+      const endDateTime = dayjs(`${endTime.format('YYYY-MM-DD')}T${selectedEndHour}`);
+
+      if (isSameDate && !endDateTime.isAfter(startDateTime)) return;
 
       const payload = {
         spaceId,
@@ -43,6 +50,17 @@ export function BookForm({ spaceId, onSuccess }: { spaceId: number; onSuccess: (
       if (response) onSuccess();
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleTimeSelect = (index: number) => {
+    if (selectedStartTime !== null && selectedEndTime !== null) {
+      setSelectedStartTime(null);
+      setSelectedEndTime(null);
+    } else if (selectedStartTime === null) {
+      setSelectedStartTime(index);
+    } else {
+      setSelectedEndTime(index);
     }
   };
 
@@ -110,8 +128,8 @@ export function BookForm({ spaceId, onSuccess }: { spaceId: number; onSuccess: (
             {timeSlots.map((time, index) => (
               <div
                 key={index}
-                className={`w-full max-w-32 flex gap-2 items-center justify-center bg-gray-200 p-2 rounded-md cursor-pointer ${selectedTime === index ? 'bg-green-300 text-white' : ''}`}
-                onClick={() => setSelectedTime(index)}
+                className={`w-full max-w-32 flex gap-2 items-center justify-center bg-gray-200 p-2 rounded-md cursor-pointer ${selectedStartTime === index ? 'bg-green-300 text-white' : ''} ${selectedEndTime === index ? 'bg-red-500 text-white' : ''}`}
+                onClick={() => handleTimeSelect(index)}
               >
                 <Clock size={15} />
                 <p className='text-xl sm:text-2xl flex'>{time}</p>

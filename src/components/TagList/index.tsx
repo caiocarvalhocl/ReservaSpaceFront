@@ -14,6 +14,9 @@ export function TagList({ items, type = 'status', maxVisible = 2 }: TagListProps
   return (
     <>
       <div>
+        {items.length === 0 && (
+          <li className='rounded-full bg-gray-200 text-gray-800 px-3 py-1 text-sm sm:text-base text-center flex items-center font-semibold'>Nenhum recurso</li>
+        )}
         {items && items.length > 0 && (
           <div className='mt-auto pt-2'>
             <ul className='flex flex-wrap gap-1 overflow-hidden'>
