@@ -1,4 +1,4 @@
-import type { UserRole } from '../../types/components';
+import type { UserRole, UserStatus } from '../../types/components';
 
 export interface LoginFormProps {
   email: string;
@@ -16,7 +16,7 @@ export interface RegisterFormProps {
 export interface UserUpdateRequest {
   id: number;
   name?: string;
-  role?: string;
+  role?: UserRole;
   email?: string;
-  status?: string;
+  status?: UserStatus;
 }

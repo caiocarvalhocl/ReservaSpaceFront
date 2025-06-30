@@ -86,7 +86,7 @@ export function UserForm({ setIsOpen }: { setIsOpen: () => void }) {
                 labelText='Função'
                 id='role'
                 value={formData.role}
-                onChange={e => updateFormData({ key: e.target.name as keyof RegisterFormProps, value: e.target.value, setState: setFormData })}
+                onChange={e => updateFormData({ key: e.target.id as keyof RegisterFormProps, value: e.target.value, setState: setFormData })}
                 options={roleOptions}
                 required
               />

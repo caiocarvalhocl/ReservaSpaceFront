@@ -103,3 +103,10 @@ export interface UserCardProps {
   onChangeCheckBox: (id: number, isChecked: boolean) => void;
   isSelected: boolean;
 }
+
+export interface PopupProps {
+  children: React.ReactNode;
+  title: string;
+  subtitle: string;
+  setIsOpen: () => void;
+}
