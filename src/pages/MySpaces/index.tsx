@@ -2,21 +2,31 @@ import { useEffect, useState } from 'react';
 import { Counter } from '../../components/Counter';
 import { Layout } from '../../components/Layout';
 import { getCounters } from '../../utils/getCounters';
-import type { SpaceCardProps } from '../../interfaces/components';
+import type { FilterField, SpaceCardProps } from '../../interfaces/components';
 import { getMySpaces } from '../../services/api';
 import { MySpaceCard } from '../../components/SpaceCard/MySpaceCard';
 import { SpaceForm } from '../../components/Form/SpaceForm';
 import { Button } from '../../components/common/Button';
+import { Search } from '../../components/Search';
+import { updateFormData } from '../../utils/updateFormData';
+import { spaceStatusMap, spaceTypeMap } from '../../types/components';
 
 export function MySpaces() {
   const [spaces, setSpaces] = useState<SpaceCardProps[]>([]);
   const [isSpaceFormOpen, setIsSpaceFormOpen] = useState(false);
+  const [filteredSpaces, setFilteredSpaces] = useState<SpaceCardProps[]>([]);
+  const [currentFilters, setCurrentFilters] = useState<Record<string, string>>({
+    searchTerm: '',
+    spaceType: 'all',
+    status: 'all',
+  });
 
   useEffect(() => {
     const fetchMySpacesData = async () => {
       try {
         const data = await getMySpaces();
         setSpaces(data);
+        setFilteredSpaces(filteredSpaces);
       } catch (err: any) {
         console.error('Error fetching spaces:', err);
       }
@@ -24,7 +34,47 @@ export function MySpaces() {
     fetchMySpacesData();
   }, []);
 
-  const counters = getCounters({ counterType: 'spaces', counter: spaces });
+  useEffect(() => {
+    let filtered = spaces;
+
+    if (currentFilters.spaceType !== 'all') {
+      filtered = filtered.filter(space => space.type === currentFilters.spaceType);
+    }
+
+    if (currentFilters.status !== 'all') {
+      filtered = filtered.filter(space => space.status === currentFilters.status);
+    }
+    if (currentFilters.searchTerm.trim() !== '') {
+      filtered = filtered.filter(space => space.name.toLowerCase().includes(currentFilters.searchTerm.toLowerCase()));
+    }
+
+    setFilteredSpaces(filtered);
+  }, [currentFilters, spaces]);
+
+  const handleFilterChange = (fieldName: string, value: string) => updateFormData({ key: fieldName, value, setState: setCurrentFilters });
+
+  const spaceFilterFields: FilterField[] = [
+    {
+      name: 'searchTerm',
+      label: 'Buscar espaços',
+      type: 'text',
+      placeholder: 'Digite o nome do espaços...',
+    },
+    {
+      name: 'spaceType',
+      label: 'Tipo de espaço',
+      type: 'select',
+      options: [{ value: 'all', label: 'Todos' }, ...Object.entries(spaceTypeMap).map(([value, label]) => ({ value, label: label as string }))],
+    },
+    {
+      name: 'status',
+      label: 'Status',
+      type: 'select',
+      options: [{ value: 'all', label: 'Todos' }, ...Object.entries(spaceStatusMap).map(([value, label]) => ({ value, label: label as string }))],
+    },
+  ];
+
+  const counters = getCounters({ counterType: 'spaces', counter: filteredSpaces });
   const handleSpaceFormModal = () => setIsSpaceFormOpen(prev => !prev);
 
   return (
@@ -52,10 +102,14 @@ export function MySpaces() {
             ))}
           </div>
 
+          <div className='mb-8'>
+            <Search filters={spaceFilterFields} onFilterChange={handleFilterChange} />
+          </div>
+
           <div>
             <div className='flex flex-wrap justify-center gap-4 mb-4'>
-              {spaces.length > 0 ? (
-                spaces.map((space, index) => (
+              {filteredSpaces.length > 0 ? (
+                filteredSpaces.map((space, index) => (
                   <MySpaceCard
                     key={index}
                     id={space.id}

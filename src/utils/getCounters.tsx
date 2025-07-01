@@ -1,4 +1,4 @@
-import { Activity, CalendarDays, ChartColumnIncreasing, CircleCheckBig, DollarSign, Loader, Star, UserRoundCheck, UserRoundMinus, UserRoundX, Users } from 'lucide-react';
+import { CalendarDays, ChartColumnIncreasing, CircleCheckBig, DollarSign, Loader, Star, UserRoundCheck, UserRoundMinus, UserRoundX, Users } from 'lucide-react';
 import type { SpaceCardProps, UserReservationsProps } from '../interfaces/components';
 import type { UserInfo } from '../interfaces/auth/user';
 
@@ -7,38 +7,55 @@ export function getCounters(props: { counterType: 'reservations'; counter: UserR
 export function getCounters(props: { counterType: 'users'; counter: UserInfo[] }): any[];
 
 export function getCounters({ counterType, counter }: { counterType: string; counter: any[] }) {
-  const currentMonth = new Date().getMonth();
+  const currentMonth = new Date(Date.now()).getUTCMonth();
   const currentYear = new Date().getFullYear();
 
   if (counterType === 'spaces') {
+    let totalMonthly = 0;
+    let totalcountersCount = 0;
+    const uniqueOccupiedSpacesIds = new Set<number>();
+
+    counter.forEach(space => {
+      const reservationDate = new Date(space.reservations[0]?.createdAt);
+
+      if (reservationDate && reservationDate.getUTCMonth() === currentMonth && reservationDate.getFullYear() === currentYear) {
+        const isReservationCanceled = space.reservations[0]?.status === 'canceled';
+
+        if (!isReservationCanceled) {
+          if (space.price) totalMonthly += +space.price;
+
+          totalcountersCount += space.reservations.length;
+          uniqueOccupiedSpacesIds.add(space.id!);
+        }
+      }
+    });
+
+    const formattedMonthly = new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalMonthly);
+    const totalSpacesRegistered = Array.from(new Set(counter.map(res => res.id))).length;
+    const percentageOfOccupiedSpaces = totalSpacesRegistered > 0 ? ((uniqueOccupiedSpacesIds.size / totalSpacesRegistered) * 100).toFixed(2) : 0;
+
     return [
       {
         title: 'Receita Mensal',
-        count: `R$${(counter as SpaceCardProps[])
-          .filter(item => {
-            const date = new Date();
-            return date.getMonth() === currentMonth && date.getFullYear() === currentYear && item.status !== 'canceled';
-          })
-          .reduce((acc, item) => acc + +item.price, 0)
-          .toFixed(2)}`,
+        count: formattedMonthly,
         icon: <DollarSign color='green' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'green',
       },
       {
         title: 'Total de Reservas',
-        count: (counter as SpaceCardProps[]).reduce((acc, item) => (item.status === 'completed' ? acc + 1 : acc), 0),
+        count: totalcountersCount,
         icon: <CalendarDays color='blue' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'blue',
       },
       {
         title: 'Taxa de Ocupacao',
-        count: 0,
+        count: `${percentageOfOccupiedSpaces}%`,
         icon: <ChartColumnIncreasing color='purple' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'purple',
       },
       {
         title: 'Espaços ativos',
-        count: (counter as SpaceCardProps[]).reduce((acc, item) => (item.status === 'pending' ? acc + 1 : acc), 0),
+        count: totalSpacesRegistered,
         icon: <CircleCheckBig color='red' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'red',
       },
@@ -46,6 +63,14 @@ export function getCounters({ counterType, counter }: { counterType: string; cou
   }
 
   if (counterType === 'reservations') {
+    const totalMonthly = (counter as UserReservationsProps[])
+      .filter(item => {
+        const date = new Date(item.startTime);
+        return date.getMonth() === currentMonth && date.getFullYear() === currentYear && item.status !== 'canceled';
+      })
+      .reduce((acc, item) => acc + +item.space.price, 0)
+      .toFixed(2);
+
     const reservationCounters = [
       {
         title: 'Total',
@@ -73,17 +98,12 @@ export function getCounters({ counterType, counter }: { counterType: string; cou
       },
       {
         title: 'Este Mês',
-        count: `R$${(counter as UserReservationsProps[])
-          .filter(item => {
-            const date = new Date(item.startTime);
-            return date.getMonth() === currentMonth && date.getFullYear() === currentYear && item.status !== 'canceled';
-          })
-          .reduce((acc, item) => acc + +item.space.price, 0)
-          .toFixed(2)}`,
+        count: `${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(parseFloat(totalMonthly))}`,
         icon: <CalendarDays color='purple' className='w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8' />,
         color: 'purple',
       },
     ];
+
     return reservationCounters;
   }
 

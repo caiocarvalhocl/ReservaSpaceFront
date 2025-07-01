@@ -7,6 +7,7 @@ import { getMyReservations } from '../../services/api';
 import { ReservationCard } from '../../components/ReservationCard';
 import { getCounters } from '../../utils/getCounters';
 import { reservationStatusMap } from '../../types/components';
+import { updateFormData } from '../../utils/updateFormData';
 
 export function MyReservation() {
   const [reservations, setReservations] = useState<UserReservationsProps[]>([]);
@@ -18,6 +19,7 @@ export function MyReservation() {
   useEffect(() => {
     const fetchReservations = async () => {
       const data = await getMyReservations();
+      console.log(data);
       setReservations(data);
       setFilteredReservations(data);
     };
@@ -39,12 +41,7 @@ export function MyReservation() {
     setFilteredReservations(filtered);
   }, [currentFilters, reservations]);
 
-  const handleFilterChange = (fieldName: string, value: string) => {
-    setCurrentFilters(prevFilters => ({
-      ...prevFilters,
-      [fieldName]: value,
-    }));
-  };
+  const handleFilterChange = (fieldName: string, value: string) => updateFormData({ key: fieldName, value, setState: setCurrentFilters });
 
   const reservationFilterFields: FilterField[] = [
     {

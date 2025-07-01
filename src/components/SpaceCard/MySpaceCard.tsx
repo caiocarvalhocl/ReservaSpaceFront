@@ -31,7 +31,7 @@ export function MySpaceCard({ id, imageUrl, name, type, description, status, pri
   return (
     <div className='w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1rem)] flex-shrink-0'>
       <div>
-        <div className='relative flex justify-center items-center bg-gray-400 w-full rounded-t-lg'>
+        <div className='relative flex justify-center items-center bg-gray-400 w-full  h-[200px] rounded-t-lg'>
           <div className='w-full h-full flex'>
             {imageUrl || defaultImageByTypeMap[type] ? (
               <img src={imageUrl ? imageUrl : defaultImageByTypeMap[type]} alt='Picture' className='w-full h-full object-cover rounded-t-lg' />
