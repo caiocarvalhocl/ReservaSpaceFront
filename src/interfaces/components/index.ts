@@ -1,4 +1,3 @@
-import { SpaceForm } from '../../components/Form/SpaceForm';
 import type { FilterFieldType, LastReservation, UserRole } from '../../types/components';
 import type { UserInfo } from '../auth/user';
 import type { SpaceFormRequest } from '../services';

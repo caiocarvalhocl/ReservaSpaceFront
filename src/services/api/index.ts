@@ -1,11 +1,10 @@
 import type { AxiosResponse } from 'axios';
 import { api } from './axios';
 import type { SpaceCardProps, UserReservationsProps } from '../../interfaces/components';
-import type { BookBody, BookResponse, RegisterResponse, ReservationUpdateRequest, ResourceRequest, SpaceFormRequest, SpaceFormResponse } from '../../interfaces/services';
+import type { BookBody, BookResponse, RegisterResponse, ReservationUpdateRequest, SpaceFormRequest, SpaceFormResponse } from '../../interfaces/services';
 import type { MySpacesResponse, UserResponse, UserUpdate } from '../../types/services';
 import type { RegisterFormProps } from '../../interfaces/auth/auth';
 import type { ReservationStatus } from '../../types/components';
-import { updateFormData } from '../../utils/updateFormData';
 
 export async function getMyReservations() {
   const response: AxiosResponse<UserReservationsProps[]> = await api.get(`api/reservations/my`);
