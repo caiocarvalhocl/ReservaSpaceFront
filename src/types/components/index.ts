@@ -4,6 +4,8 @@ import eventHall from '../../assets/eventHall.jpg';
 import meetingRoom from '../../assets/meetingRoom.jpg';
 import studio from '../../assets/studio.jpg';
 import auditorium from '../../assets/auditorium.jpg';
+import type { SpaceCardProps } from '../../interfaces/components';
+import type { SpaceFormRequest } from '../../interfaces/services';
 
 export const defaultImageByTypeMap: Record<SpaceTypes, string> = {
   sports_court: sportCourtImg,
@@ -68,3 +70,7 @@ export const reservationStatusMap: Record<ReservationStatus, string> = {
 };
 
 export type FilterFieldType = 'text' | 'select';
+
+export type MySpaceCardProps = SpaceCardProps & {
+  setIsEditing: (spaceId: number) => void;
+};

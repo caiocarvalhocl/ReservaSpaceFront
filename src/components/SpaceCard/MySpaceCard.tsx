@@ -1,12 +1,13 @@
 import { CheckLine, Edit, Ellipsis, Eye, ImageOff, Trash, Users } from 'lucide-react';
-import type { SpaceCardProps } from '../../interfaces/components';
 import { useState } from 'react';
 import { SPACE_COLOR_STATUS_MAP, ICON_BASE_CLASSNAME } from '../../utils/constants';
-import { defaultImageByTypeMap, spaceStatusMap } from '../../types/components';
+import { defaultImageByTypeMap, spaceStatusMap, type MySpaceCardProps } from '../../types/components';
 import { Button } from '../common/Button';
 import { deleteSpace, updateReservationStatus } from '../../services/api';
+import { TagList } from '../TagList';
+import type { ResourcesProps } from '../../interfaces/components';
 
-export function MySpaceCard({ id, imageUrl, name, type, description, status, price, capacity, reservations }: SpaceCardProps) {
+export function MySpaceCard({ id, imageUrl, name, type, description, status, price, capacity, reservations, spaceResources, setIsEditing }: MySpaceCardProps) {
   const [submenuOpen, setSubmenuOpen] = useState(false);
 
   const findReservation = reservations && reservations.length > 0;
@@ -41,9 +42,7 @@ export function MySpaceCard({ id, imageUrl, name, type, description, status, pri
           </div>
 
           <div className='absolute inset-4 w-fit h-fit'>
-            <span className={`capitalize text-base sm:text-xl font-semibold px-3 py-1 rounded-full self-start ${SPACE_COLOR_STATUS_MAP[status || 'inactive']}`}>
-              {spaceStatusMap[status || 'inactive']}
-            </span>
+            <span className={`capitalize text-base sm:text-xl font-semibold px-3 py-1 rounded-full self-start ${SPACE_COLOR_STATUS_MAP[status!]}`}>{spaceStatusMap[status!]}</span>
           </div>
 
           <div className='absolute inset-4 ml-auto w-fit h-fit'>
@@ -66,7 +65,15 @@ export function MySpaceCard({ id, imageUrl, name, type, description, status, pri
                         </Button>
                       </li>
                       <li className='p-4'>
-                        <Button colorType='paper' className='text-lg sm:text-xl' value='Editar'>
+                        <Button
+                          colorType='paper'
+                          className='text-lg sm:text-xl'
+                          value='Editar'
+                          onClick={() => {
+                            setSubmenuOpen(false);
+                            setIsEditing(id);
+                          }}
+                        >
                           <Edit className={`${ICON_BASE_CLASSNAME}`} />
                         </Button>
                       </li>
@@ -111,6 +118,10 @@ export function MySpaceCard({ id, imageUrl, name, type, description, status, pri
               <Users className={`${ICON_BASE_CLASSNAME}`} />
               <p>Capacidade: {capacity} pessoas</p>
             </div>
+          </div>
+
+          <div className='mr-auto'>
+            <TagList items={spaceResources as ResourcesProps[]} type='resource' />
           </div>
 
           <div className='flex items-center py-2'>

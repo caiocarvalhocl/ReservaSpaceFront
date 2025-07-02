@@ -1,10 +1,11 @@
 import type { AxiosResponse } from 'axios';
 import { api } from './axios';
 import type { SpaceCardProps, UserReservationsProps } from '../../interfaces/components';
-import type { BookBody, BookResponse, RegisterResponse, ReservationUpdateRequest, SpaceFormRequest, SpaceFormResponse } from '../../interfaces/services';
+import type { BookBody, BookResponse, RegisterResponse, ReservationUpdateRequest, ResourceRequest, SpaceFormRequest, SpaceFormResponse } from '../../interfaces/services';
 import type { MySpacesResponse, UserResponse, UserUpdate } from '../../types/services';
 import type { RegisterFormProps } from '../../interfaces/auth/auth';
 import type { ReservationStatus } from '../../types/components';
+import { updateFormData } from '../../utils/updateFormData';
 
 export async function getMyReservations() {
   const response: AxiosResponse<UserReservationsProps[]> = await api.get(`api/reservations/my`);
@@ -54,6 +55,12 @@ export async function createSpace(space: SpaceFormRequest) {
   return response.data;
 }
 
+export async function updateSpace(id: number, space: SpaceFormRequest) {
+  const response: AxiosResponse<SpaceFormResponse> = await api.put(`api/spaces/${id}`, space);
+
+  return response.data;
+}
+
 export async function updateReservationStatus({ id, status }: ReservationUpdateRequest) {
   const response: AxiosResponse<ReservationStatus> = await api.put(`api/reservations/${id}/status`, { status });
 
@@ -62,6 +69,12 @@ export async function updateReservationStatus({ id, status }: ReservationUpdateR
 
 export async function deleteSpace({ id }: { id: number }) {
   const response: AxiosResponse = await api.delete(`api/spaces/${id}`);
+
+  return response.data;
+}
+
+export async function getAllResources() {
+  const response: AxiosResponse = await api.get(`api/resources/`);
 
   return response.data;
 }

@@ -2,7 +2,7 @@ import { Counter } from '../../components/Counter';
 import { Layout } from '../../components/Layout';
 import { Search } from '../../components/Search';
 import { useEffect, useState } from 'react';
-import type { FilterField, ResourcesProps, UserReservationsProps } from '../../interfaces/components';
+import type { FilterField, UserReservationsProps } from '../../interfaces/components';
 import { getMyReservations } from '../../services/api';
 import { ReservationCard } from '../../components/ReservationCard';
 import { getCounters } from '../../utils/getCounters';
@@ -91,7 +91,7 @@ export function MyReservation() {
                     price={reservation.space.price}
                     description={reservation.space.description}
                     capacity={reservation.space.capacity}
-                    spaceResources={reservation.space.spaceResources as ResourcesProps[]}
+                    spaceResources={reservation.space.spaceResources!}
                     status={reservation.status}
                     startTime={reservation.startTime}
                     endTime={reservation.endTime}

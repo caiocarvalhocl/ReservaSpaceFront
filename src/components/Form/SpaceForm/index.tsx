@@ -5,7 +5,9 @@ import { updateFormData } from '../../../utils/updateFormData';
 import { Button } from '../../common/Button';
 import { Input, SelectInput, Textarea } from '../../common/Input';
 import { spaceStatusMap, spaceTypeMap, type SpaceStatus, type SpaceTypes } from '../../../types/components';
-import { createSpace } from '../../../services/api';
+import { createSpace, updateSpace } from '../../../services/api';
+import type { SpaceFormProps } from '../../../interfaces/components';
+import { ResourceSelector } from '../../common/Selector/ResourceSelector';
 
 const initialFormState: SpaceFormRequest = {
   name: '',
@@ -15,10 +17,11 @@ const initialFormState: SpaceFormRequest = {
   price: 0,
   description: '',
   status: 'active' as SpaceStatus,
+  resources: [],
 };
 
-export function SpaceForm({ setIsOpen }: { setIsOpen: () => void }) {
-  const [formData, setFormData] = useState<SpaceFormRequest>(initialFormState);
+export function SpaceForm({ setIsOpen, isEditing = false, spaceData }: SpaceFormProps) {
+  const [formData, setFormData] = useState<SpaceFormRequest>(!isEditing ? initialFormState : spaceData!);
 
   const spaceTypeOptions = [...Object.entries(spaceTypeMap).map(([value, label]) => ({ value, label: label as string }))];
   const spaceStatusOptions = [...Object.entries(spaceStatusMap).map(([value, label]) => ({ value, label: label as string }))];
@@ -26,7 +29,10 @@ export function SpaceForm({ setIsOpen }: { setIsOpen: () => void }) {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const success = await createSpace(formData);
+      let success = null;
+      if (!isEditing) success = await createSpace(formData);
+      if (isEditing) success = await updateSpace(spaceData?.id!, formData);
+
       if (success) setIsOpen();
     } catch (error) {
       console.error(error);
@@ -39,14 +45,14 @@ export function SpaceForm({ setIsOpen }: { setIsOpen: () => void }) {
       <div className='bg-white p-6 rounded-lg shadow-xl w-full flex flex-col gap-4 max-w-11/12 sm:max-w-2xl mx-auto relative'>
         <div className='flex flex-col gap-3'>
           <div className='flex items-center'>
-            <h1 className='font-bold text-3xl'>Criar Novo Espaco</h1>
+            <h1 className='font-bold text-3xl'>{`${isEditing ? 'Editar' : 'Criar novo'} Espaço`}</h1>
 
             <div className='ml-auto cursor-pointer'>
               <X onClick={setIsOpen} />
             </div>
           </div>
 
-          <p className='text-gray-400 text-xl'>Preencha as informacoes do espaco</p>
+          <p className='text-gray-400 text-xl'>Preencha as informacoes do espaço</p>
         </div>
 
         <div>
@@ -96,6 +102,14 @@ export function SpaceForm({ setIsOpen }: { setIsOpen: () => void }) {
               />
             </div>
 
+            <div className='col-span-1 md:col-span-2 my-4'>
+              <label className='text-lg md:text-xl'>Recursos:</label>
+              <ResourceSelector
+                onResourcesChange={newResources => updateFormData({ key: 'resources', value: newResources, setState: setFormData })}
+                initialSelectedResources={formData.resources}
+              />
+            </div>
+
             <div className='col-span-2 my-2'>
               <Textarea
                 id='description'
@@ -119,7 +133,7 @@ export function SpaceForm({ setIsOpen }: { setIsOpen: () => void }) {
 
             <div className='col-span-2 flex gap-4 w-fit ml-auto mt-4'>
               <Button colorType='paper' hoverType='secondary' className='py-2 px-4 font-bold outline outline-gray-300 text-base md:text-lg' onClick={setIsOpen} value='Cancelar' />
-              <Button type='submit' colorType='main' hoverType='paper' className='py-2 px-4 font-bold' value='Criar Espaco' />
+              <Button type='submit' colorType='main' hoverType='paper' className='py-2 px-4 font-bold' value={`${isEditing ? 'Editar' : 'Criar '} Espaços`} />
             </div>
           </form>
         </div>

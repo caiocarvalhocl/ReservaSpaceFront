@@ -20,7 +20,13 @@ export interface BookResponse {
   message: string;
 }
 
+export interface ResourceRequest {
+  id?: number;
+  name: string;
+}
+
 export interface SpaceFormRequest {
+  id?: number;
   type: SpaceTypes;
   imageUrl: string | null;
   name: string;
@@ -28,6 +34,7 @@ export interface SpaceFormRequest {
   price: number;
   capacity: number;
   status: SpaceStatus;
+  resources?: ResourceRequest[];
 }
 
 export interface SpaceFormResponse {

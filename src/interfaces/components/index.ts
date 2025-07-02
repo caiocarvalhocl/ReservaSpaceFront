@@ -1,5 +1,7 @@
+import { SpaceForm } from '../../components/Form/SpaceForm';
 import type { FilterFieldType, LastReservation, UserRole } from '../../types/components';
 import type { UserInfo } from '../auth/user';
+import type { SpaceFormRequest } from '../services';
 
 export interface NavItem {
   path: string;
@@ -28,11 +30,16 @@ export interface SpaceCardProps {
   updatedAt?: string;
 }
 
+export interface SpaceFormProps {
+  setIsOpen: () => void;
+  isEditing?: boolean;
+  spaceData?: SpaceFormRequest;
+}
+
 export interface ResourcesProps {
   quantity: number;
   resource: {
     id: number;
-    description: string;
     name: string;
   };
 }

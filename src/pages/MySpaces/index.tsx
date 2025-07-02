@@ -10,11 +10,14 @@ import { Button } from '../../components/common/Button';
 import { Search } from '../../components/Search';
 import { updateFormData } from '../../utils/updateFormData';
 import { spaceStatusMap, spaceTypeMap } from '../../types/components';
+import type { SpaceFormRequest } from '../../interfaces/services';
 
 export function MySpaces() {
   const [spaces, setSpaces] = useState<SpaceCardProps[]>([]);
   const [isSpaceFormOpen, setIsSpaceFormOpen] = useState(false);
   const [filteredSpaces, setFilteredSpaces] = useState<SpaceCardProps[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [spaceDataEdit, setSpaceDataEdit] = useState<SpaceFormRequest>();
   const [currentFilters, setCurrentFilters] = useState<Record<string, string>>({
     searchTerm: '',
     spaceType: 'all',
@@ -75,7 +78,26 @@ export function MySpaces() {
   ];
 
   const counters = getCounters({ counterType: 'spaces', counter: filteredSpaces });
-  const handleSpaceFormModal = () => setIsSpaceFormOpen(prev => !prev);
+
+  const handleSpaceFormModal = () => {
+    setIsSpaceFormOpen(prev => !prev);
+
+    if (isEditing) setIsEditing(false);
+  };
+  const handleIsEditingState = (spaceId: number) => {
+    setIsEditing(true);
+
+    const spaceToEdit = filteredSpaces.find(space => space.id === spaceId);
+
+    if (!spaceToEdit) return;
+
+    const { id, type, imageUrl, name, description, price, capacity, status, spaceResources } = spaceToEdit;
+
+    const resources = spaceResources?.map(item => item.resource);
+
+    setSpaceDataEdit({ id, type, imageUrl, name, description, price: +price, capacity, status: status!, resources });
+    handleSpaceFormModal();
+  };
 
   return (
     <Layout>
@@ -120,7 +142,9 @@ export function MySpaces() {
                     description={space.description}
                     capacity={space.capacity}
                     status={space.status}
+                    spaceResources={space.spaceResources}
                     reservations={space.reservations}
+                    setIsEditing={handleIsEditingState}
                   />
                 ))
               ) : (
@@ -132,7 +156,8 @@ export function MySpaces() {
           </div>
         </div>
       </div>
-      {isSpaceFormOpen && <SpaceForm setIsOpen={handleSpaceFormModal} />}
+
+      {isSpaceFormOpen && <SpaceForm setIsOpen={handleSpaceFormModal} isEditing={isEditing} spaceData={spaceDataEdit} />}
     </Layout>
   );
 }

@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
+import type { ResourceRequest } from '../../services';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   colorType: string;
@@ -20,4 +21,9 @@ interface SelectOption {
 export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   labelText?: string;
   options: SelectOption[];
+}
+
+export interface ResourceSelectorProps {
+  onResourcesChange: (newResources: ResourceRequest[]) => void;
+  initialSelectedResources?: ResourceRequest[];
 }

@@ -28,8 +28,8 @@ export function TagList({ items, type = 'status', maxVisible = 2 }: TagListProps
                   {handleItemType(item)}
                 </li>
               ))}
-              {items.length > 3 && (
-                <li className='rounded-full bg-gray-200 text-gray-800 px-3 py-1 text-sm sm:text-base text-center flex items-center font-semibold'>+{items.length - 3} More</li>
+              {items.length > 2 && (
+                <li className='rounded-full bg-gray-200 text-gray-800 px-3 py-1 text-sm sm:text-base text-center flex items-center font-semibold'>+{items.length - 2}</li>
               )}
             </ul>
           </div>
