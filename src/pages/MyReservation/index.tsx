@@ -6,7 +6,7 @@ import type { FilterField, UserReservationsProps } from '../../interfaces/compon
 import { getMyReservations } from '../../services/api';
 import { ReservationCard } from '../../components/ReservationCard';
 import { getCounters } from '../../utils/getCounters';
-import { reservationStatusMap } from '../../types/components';
+import { spaceTypeMap } from '../../types/components';
 import { updateFormData } from '../../utils/updateFormData';
 
 export function MyReservation() {
@@ -14,7 +14,7 @@ export function MyReservation() {
   const [filteredReservations, setFilteredReservations] = useState<UserReservationsProps[]>([]);
   const [currentFilters, setCurrentFilters] = useState<Record<string, string>>({
     searchTerm: '',
-    status: 'all',
+    spaceType: 'all',
   });
   useEffect(() => {
     const fetchReservations = async () => {
@@ -30,8 +30,8 @@ export function MyReservation() {
   useEffect(() => {
     let filtered = reservations;
 
-    if (currentFilters.status !== 'all') {
-      filtered = filtered.filter(reservation => reservation.status === currentFilters.status);
+    if (currentFilters.spaceType !== 'all') {
+      filtered = filtered.filter(reservation => reservation.space.type === currentFilters.spaceType);
     }
 
     if (currentFilters.searchTerm.trim() !== '') {
@@ -51,10 +51,10 @@ export function MyReservation() {
       placeholder: 'Digite o nome do espaços...',
     },
     {
-      name: 'status',
-      label: 'Status',
+      name: 'spaceType',
+      label: 'Tipo',
       type: 'select',
-      options: [{ value: 'all', label: 'Todos' }, ...Object.entries(reservationStatusMap).map(([value, label]) => ({ value, label: label as string }))],
+      options: [{ value: 'all', label: 'Todos' }, ...Object.entries(spaceTypeMap).map(([value, label]) => ({ value, label: label as string }))],
     },
   ];
 

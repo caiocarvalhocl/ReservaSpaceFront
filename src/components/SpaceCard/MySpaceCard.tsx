@@ -1,7 +1,7 @@
-import { CheckLine, Edit, Ellipsis, Eye, ImageOff, Trash, Users } from 'lucide-react';
+import { CheckLine, Edit, Ellipsis, Eye, ImageOff, Trash, Users, X } from 'lucide-react';
 import { useState } from 'react';
 import { SPACE_COLOR_STATUS_MAP, ICON_BASE_CLASSNAME } from '../../utils/constants';
-import { defaultImageByTypeMap, spaceStatusMap, type MySpaceCardProps } from '../../types/components';
+import { defaultImageByTypeMap, spaceStatusMap, type LastReservation, type MySpaceCardProps } from '../../types/components';
 import { Button } from '../common/Button';
 import { deleteSpace, updateReservationStatus } from '../../services/api';
 import { TagList } from '../TagList';
@@ -11,11 +11,15 @@ export function MySpaceCard({ id, imageUrl, name, type, description, status, pri
   const [submenuOpen, setSubmenuOpen] = useState(false);
 
   const findReservation = reservations && reservations.length > 0;
+  const filteredReservations: LastReservation[] | null = findReservation ? reservations.filter(reservation => reservation.status !== 'canceled') : null;
+
   const formattedDateLastReservation = findReservation ? new Date(reservations[0].createdAt).toLocaleDateString() : null;
 
-  const handleReservationRelease = async (id: number) => {
+  const handleReservationRelease = async (id: number, denied?: boolean) => {
     try {
-      await updateReservationStatus({ id: Number(id), status: 'confirmed' });
+      if (!denied) return await updateReservationStatus({ id: Number(id), status: 'confirmed' });
+
+      await updateReservationStatus({ id: Number(id), status: 'canceled' });
     } catch (error) {
       console.error(error);
     }
@@ -78,12 +82,24 @@ export function MySpaceCard({ id, imageUrl, name, type, description, status, pri
                         </Button>
                       </li>
 
-                      {findReservation && reservations[0].status === 'pending' && (
-                        <li className='p-4'>
-                          <Button colorType='paper' value='Liberar reserva' className='text-sm sm:text-lg' onClick={() => handleReservationRelease(reservations[0].id)}>
-                            <CheckLine className={`${ICON_BASE_CLASSNAME}`} />
-                          </Button>
-                        </li>
+                      {filteredReservations && filteredReservations?.length > 0 && filteredReservations[0].status === 'pending' && (
+                        <>
+                          <li className='p-4'>
+                            <Button colorType='paper' value='Liberar reserva' className='text-sm sm:text-lg' onClick={() => handleReservationRelease(filteredReservations[0].id)}>
+                              <CheckLine className={`${ICON_BASE_CLASSNAME}`} />
+                            </Button>
+                          </li>
+                          <li className='p-4'>
+                            <Button
+                              colorType='paper'
+                              value='Recusar reserva'
+                              className='text-sm sm:text-lg'
+                              onClick={() => handleReservationRelease(filteredReservations[0].id, true)}
+                            >
+                              <X className={`${ICON_BASE_CLASSNAME}`} />
+                            </Button>
+                          </li>
+                        </>
                       )}
 
                       <hr className='text-gray-200' />
