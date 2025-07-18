@@ -93,7 +93,7 @@ export function UserForm({ setIsOpen }: { setIsOpen: () => void }) {
 
               <div className='col-span-1 md:col-span-2 flex gap-4 w-fit ml-auto'>
                 <Button colorType='paper' hoverType='paper' onClick={setIsOpen} value='Cancelar' className='outline outline-gray-300' />
-                <Button colorType='main' hoverType='secondary' onClick={setIsOpen} value='Criar Conta' className='font-bold' />
+                <Button type='submit' colorType='main' hoverType='secondary' value='Criar Conta' className='font-bold' />
               </div>
             </div>
           </form>
